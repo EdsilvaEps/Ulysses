@@ -10,16 +10,19 @@ CONFIG += c++17
 
 SOURCES += \
     event.cpp \
+    eventedition.cpp \
     main.cpp \
     mainwindow.cpp \
     type.cpp
 
 HEADERS += \
     event.h \
+    eventedition.h \
     mainwindow.h \
     type.h
 
 FORMS += \
+    eventedition.ui \
     eventeditwindow.ui \
     mainwindow.ui
 
