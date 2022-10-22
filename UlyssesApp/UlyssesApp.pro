@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17
+CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -10,20 +10,19 @@ CONFIG += c++17
 
 SOURCES += \
     event.cpp \
-    eventedition.cpp \
+    eventedit.cpp \
     main.cpp \
     mainwindow.cpp \
     type.cpp
 
 HEADERS += \
     event.h \
-    eventedition.h \
+    eventedit.h \
     mainwindow.h \
     type.h
 
 FORMS += \
-    eventedition.ui \
-    eventeditwindow.ui \
+    eventedit.ui \
     mainwindow.ui
 
 # Default rules for deployment.

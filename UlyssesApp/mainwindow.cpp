@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "eventedit.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,6 +20,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_addEventBtn_clicked()
 {
     // open event creation dialog
+    EventEdit * dialog = new EventEdit(this);
+    dialog->exec();
 
 }
 
