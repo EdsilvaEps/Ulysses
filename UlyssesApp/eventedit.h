@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QAbstractButton>
+#include <QDebug>
+#include "event.h"
 
 namespace Ui {
 class Dialog;
@@ -23,11 +25,15 @@ private slots:
 
     void on_browseBtn_clicked();
 
+    void on_linkTypeSelection_toggled(bool checked);
+
+    void on_exeTypeSelection_toggled(bool checked);
+
 private:
     Ui::Dialog *ui;
+    Event *event;
+    bool isNewEvent; // variable provide from parent
 
-    QString eventPath;
-    bool isNewEvent;
 
     void saveEvent();
     void loadEvent();

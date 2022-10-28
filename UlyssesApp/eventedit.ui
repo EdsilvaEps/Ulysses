@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
+    <width>325</width>
     <height>455</height>
    </rect>
   </property>
@@ -62,6 +62,9 @@
           <horstretch>2</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="placeholderText">
+         <string>Add link or path to exe </string>
         </property>
        </widget>
       </item>
