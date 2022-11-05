@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include <QDebug>
+#include <fstream>
 #include "event.h"
 
 namespace Ui {
@@ -32,13 +33,16 @@ private slots:
 private:
     Ui::Dialog *ui;
     Event *event;
-    bool isNewEvent; // variable provide from parent
+    bool _isNewEvent; // variable provide from parent
+    QString _saveFile;
 
 
     void saveEvent();
     void loadEvent();
     void modifyEvent(); // TODO: specify arg details of event
-
+    QList<Qt::DayOfWeek> getSelectedDays();
+    bool fieldsValid();
+    void writeFormattedEventToFile();
 };
 
 #endif // EVENTEDIT_H

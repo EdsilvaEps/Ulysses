@@ -6,6 +6,9 @@
 #include <QUrl>
 #include <QProcess>
 #include <QDateTime>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "type.h"
 
 class Event : public QObject
@@ -13,6 +16,7 @@ class Event : public QObject
     Q_OBJECT
 private:
     int _id;
+    QString _name;
     QString _path;
     Type::type _type;
     QString _time;
@@ -43,6 +47,10 @@ public:
     const QList<Qt::DayOfWeek> &days() const;
     void setDays(const QList<Qt::DayOfWeek> &newDays);
 
+    const QString &name() const;
+    void setName(const QString &newName);
+
+    QJsonDocument getAsJsonDoc();
 signals:
 
 };

@@ -11,6 +11,7 @@ CONFIG += c++14
 SOURCES += \
     event.cpp \
     eventedit.cpp \
+    listitemwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     type.cpp
@@ -18,14 +19,18 @@ SOURCES += \
 HEADERS += \
     event.h \
     eventedit.h \
+    listitemwidget.h \
     mainwindow.h \
     type.h
 
 FORMS += \
     eventedit.ui \
+    listitemwidget.ui \
     mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES +=

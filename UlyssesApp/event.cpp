@@ -17,8 +17,18 @@ namespace {
 } */
 
 
+const QString &Event::name() const
+{
+    return _name;
+}
+
+void Event::setName(const QString &newName)
+{
+    _name = newName;
+}
+
 Event::Event(QObject *parent) : QObject{parent},
-    _id(-1), _path(""), _type(Type::link), _time("00:00"), _days(QList<Qt::DayOfWeek>())
+    _id(-1), _name("event"), _path(""), _type(Type::link), _time("00:00"), _days(QList<Qt::DayOfWeek>())
 {
 
 }
@@ -105,6 +115,40 @@ bool Event::launchTime()
     //}
     //return false;
     return false;
+
+}
+
+/*
+    this->_id = id;
+    this->_path = path;
+    this->_type = type;
+    this->_time = time;
+    this->_days = days;    this->_id = id;
+    */
+
+QJsonDocument Event::getAsJsonDoc(){
+    QJsonObject eventObj;
+    eventObj.insert("id", this->_id);
+    eventObj.insert("name", this->_name);
+    if(this->_type == Type::exe) eventObj.insert("type", "exe");
+    if(this->_type == Type::link) eventObj.insert("type", "link");
+    eventObj.insert("time", this->_time);
+    eventObj.insert("path", this->_path);
+
+    QJsonArray daysObj;
+    for(Qt::DayOfWeek day : this->_days){
+        if(day == Qt::Monday) daysObj.push_back("Monday");
+        if(day == Qt::Tuesday) daysObj.push_back("Tuesday");
+        if(day == Qt::Wednesday) daysObj.push_back("Wednesday");
+        if(day == Qt::Thursday) daysObj.push_back("Thursday");
+        if(day == Qt::Friday) daysObj.push_back("Friday");
+        if(day == Qt::Saturday) daysObj.push_back("Saturday");
+        if(day == Qt::Sunday) daysObj.push_back("Sunday");
+    }
+
+    eventObj.insert("days", daysObj);
+    QJsonDocument doc(eventObj);
+    return doc;
 
 }
 
