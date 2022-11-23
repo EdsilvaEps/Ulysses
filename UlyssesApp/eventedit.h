@@ -4,7 +4,8 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include <QDebug>
-#include <fstream>
+#include <QFile>
+#include <QTextStream>
 #include "event.h"
 
 namespace Ui {
@@ -18,6 +19,14 @@ class EventEdit : public QDialog
 public:
     explicit EventEdit(QWidget *parent = nullptr);
     ~EventEdit();
+
+    static void removeEvent(int id); // TODO: finish this function -> it should be possible to remove an event from the main list screen
+
+    QJsonArray *getEventsJsonArray(); // returns events as a json array
+
+    QList<Event> *getEvents(); // get all the registered events in a nice list of Event objects
+
+    const QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json";
 
 private slots:
 
@@ -34,8 +43,6 @@ private:
     Ui::Dialog *ui;
     Event *event;
     bool _isNewEvent; // variable provide from parent
-    QString _saveFile;
-
 
     void saveEvent();
     void loadEvent();
@@ -43,6 +50,8 @@ private:
     QList<Qt::DayOfWeek> getSelectedDays();
     bool fieldsValid();
     void writeFormattedEventToFile();
+    int getNextValidId(); // TODO: Finish this function -> it checks whats the next id available for event
+    bool isFileEmpty();
 };
 
 #endif // EVENTEDIT_H

@@ -22,6 +22,42 @@ EventEdit::~EventEdit()
     delete ui;
 }
 
+void EventEdit::removeEvent(int id)
+{
+    // logic for removing event from json file
+    // basically getting the list, removing event from the list and then overwriting the file
+    // with new list
+    return;
+
+}
+
+QJsonArray *EventEdit::getEventsJsonArray()
+{
+    //TODO return the events in the list as a json array
+    QJsonArray *events = new QJsonArray;
+
+    QString val;
+    QFile file(this->eventsFile);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        val = file.readAll();
+    }
+    else throw std::runtime_error("could not open file");
+    file.close();
+
+    QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
+    if(d.isArray()) *events = d.array();
+    qDebug() << d;
+    return events;
+
+}
+
+QList<Event> *EventEdit::getEvents()
+{
+    QList<Event> *tempList = new QList<Event>;
+
+
+}
+
 void EventEdit::on_submitBox_clicked(QAbstractButton *button)
 {
     if(!fieldsValid()) return;
@@ -110,32 +146,48 @@ bool EventEdit::fieldsValid(){
 
 void EventEdit::writeFormattedEventToFile()
 {
-    // TODO: add method for reading doc, checking and incrementing ID
+    qDebug() << "saving event to file..." + this->eventsFile;
+    QJsonDocument doc(this->event->getAsJsonObj());
+    QString strEvent(doc.toJson());
 
-    this->_saveFile = "/home/edson/Documents/ulysses_conf/testfile.txt"; // TODO: put this variable in some standard location
+    QString filename = this->eventsFile;
+    QFile file(filename);
+    if(this->isFileEmpty()){
+        if (file.open(QIODevice::ReadWrite)) {
+            QTextStream stream(&file);
 
-    qDebug() << "saving event to file..." + _saveFile;
+            stream << "[" << Qt::endl;
+            stream << strEvent << Qt::endl;
+            stream << "]";
+            file.close();
+        }
+        else throw std::runtime_error("could not open file");
+        return;
+    }
 
-    // initialize file
-    std::ofstream outfile;
-    outfile.open(this->_saveFile.toStdString(), std::ios_base::app);
+    QJsonArray *events = this->getEventsJsonArray();
+    events->push_back(this->event->getAsJsonObj());
+    QJsonDocument eventsDoc(*events);
+    if (file.open(QIODevice::ReadWrite)) {
+        QTextStream stream(&file);
 
-    // continue
-    if(outfile.is_open()){
-        outfile << this->event->getAsJsonDoc().toJson().toStdString() + ",";
-        outfile.close();
+        stream << QString(eventsDoc.toJson()) << Qt::endl;
+        file.close();
     }
     else throw std::runtime_error("could not open file");
-
-
-
-
-
+    return;
 }
+
+int EventEdit::getNextValidId()
+{
+    if(this->isFileEmpty()) return 0;
+    return this->getEventsJsonArray()->size();
+}
+
 
 void EventEdit::saveEvent()
 {
-
+    this->event->setId(this->getNextValidId());
     this->event->setPath(ui->urlPath->text());
     this->event->setDays(getSelectedDays());
     this->event->setTime(ui->timeEdit->text());
@@ -156,6 +208,13 @@ void EventEdit::modifyEvent()
     qDebug() << "Modifying event...";
 }
 
+bool EventEdit::isFileEmpty(){
+
+    QString filename = this->eventsFile;
+    QFile file(filename);
+    if(file.size() > 0) return false;
+    return true;
+}
 
 
 void EventEdit::on_linkTypeSelection_toggled(bool checked)

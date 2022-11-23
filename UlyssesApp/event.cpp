@@ -27,6 +27,11 @@ void Event::setName(const QString &newName)
     _name = newName;
 }
 
+void Event::setId(int newId)
+{
+    _id = newId;
+}
+
 Event::Event(QObject *parent) : QObject{parent},
     _id(-1), _name("event"), _path(""), _type(Type::link), _time("00:00"), _days(QList<Qt::DayOfWeek>())
 {
@@ -118,15 +123,7 @@ bool Event::launchTime()
 
 }
 
-/*
-    this->_id = id;
-    this->_path = path;
-    this->_type = type;
-    this->_time = time;
-    this->_days = days;    this->_id = id;
-    */
-
-QJsonDocument Event::getAsJsonDoc(){
+QJsonObject Event::getAsJsonObj(){
     QJsonObject eventObj;
     eventObj.insert("id", this->_id);
     eventObj.insert("name", this->_name);
@@ -147,8 +144,7 @@ QJsonDocument Event::getAsJsonDoc(){
     }
 
     eventObj.insert("days", daysObj);
-    QJsonDocument doc(eventObj);
-    return doc;
+    return eventObj;
 
 }
 
