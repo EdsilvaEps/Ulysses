@@ -1,7 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <QObject>
+//#include <QObject>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QProcess>
@@ -11,9 +11,8 @@
 #include <QJsonArray>
 #include "type.h"
 
-class Event : public QObject
+class Event
 {
-    Q_OBJECT
 private:
     int _id;
     QString _name;
@@ -23,14 +22,14 @@ private:
     QList<Qt::DayOfWeek> _days;
 
 public:
-    explicit Event(QObject *parent = nullptr);
+    //explicit Event(QObject *parent = nullptr);
 
     Event(int id, QString path, Type::type type, QString time, QList<Qt::DayOfWeek> days);
 
-    //Event();
+    Event();
 
     // launch event
-    void launch();
+    //void launch();
 
     // check if event is within launching time
     bool launchTime();
@@ -52,8 +51,6 @@ public:
 
     QJsonObject getAsJsonObj();
     void setId(int newId);
-
-signals:
 
 };
 

@@ -51,46 +51,6 @@ QJsonArray *EventEdit::getEventsJsonArray()
 
 }
 
-// TODO: write this function on MainWindow class
-/*QList<Event> *EventEdit::getEvents()
-{
-    QList<Event> *eventsList = new QList<Event>;
-    QJsonArray *eventsInJson = new QJsonArray();
-    eventsInJson = EventEdit::getEventsJsonArray();
-
-    if(!eventsInJson->empty()){
-        qDebug() << "getEvents()::Processing list of events...";
-        for(const QJsonValue& eventJson : *eventsInJson){
-            QJsonObject obj = eventJson.toObject();
-            int id = obj["id"].toInt();
-            QString name = obj["name"].toString();
-            QString path = obj["path"].toString();
-            QString time = obj["time"].toString();
-            Type::type type = (obj["type"].toString() == "link") ? Type::link : Type::exe;
-            QList<Qt::DayOfWeek> days;
-
-            for(int i=0; i< obj["days"].toArray().count(); ++i){
-                QString str = obj["days"].toArray().at(i).toString();
-                if(str == "Monday") days.append(Qt::Monday);
-                if(str == "Tuesday") days.append(Qt::Tuesday);
-                if(str == "Wednesday") days.append(Qt::Wednesday);
-                if(str == "Thursday") days.append(Qt::Thursday);
-                if(str == "Friday") days.append(Qt::Friday);
-                if(str == "Saturday") days.append(Qt::Saturday);
-                if(str == "Sunday") days.append(Qt::Sunday);
-            }
-
-           Event *ev = new Event(id, path, type, time, days);
-           eventsList->append(*ev);
-           delete(ev);
-        }
-    }
-
-    return eventsList;
-
-
-}*/
-
 void EventEdit::on_submitBox_clicked(QAbstractButton *button)
 {
     if(!fieldsValid()) return;

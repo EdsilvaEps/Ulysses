@@ -32,7 +32,7 @@ void Event::setId(int newId)
     _id = newId;
 }
 
-Event::Event(QObject *parent) : QObject{parent},
+Event::Event():
     _id(-1), _name("event"), _path(""), _type(Type::link), _time("00:00"), _days(QList<Qt::DayOfWeek>())
 {
 
@@ -92,7 +92,7 @@ void Event::setDays(const QList<Qt::DayOfWeek> &newDays)
     _days = newDays;
 }
 
-void Event::launch()
+/*void Event::launch()
 {
     // TODO: this all should be handled by a daemon
     if(this->_type == Type::type::link){
@@ -106,7 +106,7 @@ void Event::launch()
         process->start(this->_path);
     }
 
-}
+}*/
 
 bool Event::launchTime()
 {
