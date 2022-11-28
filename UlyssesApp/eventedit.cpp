@@ -2,6 +2,7 @@
 #include "ui_eventedit.h"
 #include "QMessageBox"
 #include <QFileDialog>
+#include "event.h"
 
 EventEdit::EventEdit(QWidget *parent) :
     QDialog(parent),
@@ -33,11 +34,10 @@ void EventEdit::removeEvent(int id)
 
 QJsonArray *EventEdit::getEventsJsonArray()
 {
-    //TODO return the events in the list as a json array
     QJsonArray *events = new QJsonArray;
 
     QString val;
-    QFile file(this->eventsFile);
+    QFile file(EventEdit::eventsFile);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         val = file.readAll();
     }
@@ -51,12 +51,45 @@ QJsonArray *EventEdit::getEventsJsonArray()
 
 }
 
-QList<Event> *EventEdit::getEvents()
+// TODO: write this function on MainWindow class
+/*QList<Event> *EventEdit::getEvents()
 {
-    QList<Event> *tempList = new QList<Event>;
+    QList<Event> *eventsList = new QList<Event>;
+    QJsonArray *eventsInJson = new QJsonArray();
+    eventsInJson = EventEdit::getEventsJsonArray();
+
+    if(!eventsInJson->empty()){
+        qDebug() << "getEvents()::Processing list of events...";
+        for(const QJsonValue& eventJson : *eventsInJson){
+            QJsonObject obj = eventJson.toObject();
+            int id = obj["id"].toInt();
+            QString name = obj["name"].toString();
+            QString path = obj["path"].toString();
+            QString time = obj["time"].toString();
+            Type::type type = (obj["type"].toString() == "link") ? Type::link : Type::exe;
+            QList<Qt::DayOfWeek> days;
+
+            for(int i=0; i< obj["days"].toArray().count(); ++i){
+                QString str = obj["days"].toArray().at(i).toString();
+                if(str == "Monday") days.append(Qt::Monday);
+                if(str == "Tuesday") days.append(Qt::Tuesday);
+                if(str == "Wednesday") days.append(Qt::Wednesday);
+                if(str == "Thursday") days.append(Qt::Thursday);
+                if(str == "Friday") days.append(Qt::Friday);
+                if(str == "Saturday") days.append(Qt::Saturday);
+                if(str == "Sunday") days.append(Qt::Sunday);
+            }
+
+           Event *ev = new Event(id, path, type, time, days);
+           eventsList->append(*ev);
+           delete(ev);
+        }
+    }
+
+    return eventsList;
 
 
-}
+}*/
 
 void EventEdit::on_submitBox_clicked(QAbstractButton *button)
 {
