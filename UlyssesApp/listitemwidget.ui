@@ -32,14 +32,15 @@
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset theme="media-playback-start"/>
+      <iconset theme="media-playback-start">
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="2">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="typelabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -52,7 +53,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Link</string>
+        <string>Unknown</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -60,7 +61,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="namelabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -78,7 +79,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="dayslabel">
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -90,7 +91,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="timelabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -108,7 +109,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QToolButton" name="toolButton_2">
+      <widget class="QToolButton" name="settingsbtn">
        <property name="layoutDirection">
         <enum>Qt::RightToLeft</enum>
        </property>
@@ -116,7 +117,8 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="document-properties"/>
+        <iconset theme="document-properties">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>

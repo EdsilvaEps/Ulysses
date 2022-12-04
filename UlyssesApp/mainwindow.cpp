@@ -13,22 +13,32 @@ MainWindow::MainWindow(QWidget *parent)
     // ------------- TODO: everything below should have its own class (adapter) -------------------
     // ------------------- create a mock element on the list --------------------------------------
     // creating new generic list item
-    QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
+    //QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
 
     // adding item to list widget
-    ui->listWidget->addItem(listWidgetItem);
+    //ui->listWidget->addItem(listWidgetItem);
 
     // creating an object of our custom list item widget
-    ListItemWidget *testItemWidgetItem = new ListItemWidget;
+    //ListItemWidget *testItemWidgetItem = new ListItemWidget;
 
     // making sure that the generic list item is the same size as the custom item widget
-    listWidgetItem->setSizeHint(testItemWidgetItem->sizeHint());
+    //listWidgetItem->setSizeHint(testItemWidgetItem->sizeHint());
 
     // finally, adding the item widget to the list
-    ui->listWidget->setItemWidget(listWidgetItem, testItemWidgetItem);
+    //ui->listWidget->setItemWidget(listWidgetItem, testItemWidgetItem);
 
     QList<Event> events = this->getEvents(); // TODO: use this function to populate the widget list
     qDebug() << "Number of events to populate: " << events.size();
+
+    for(Event event : events){
+        QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(listWidgetItem);
+        ListItemWidget *customWidgetItem = new ListItemWidget(ui->listWidget,&event);
+        listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
+        ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
+
+    }
+
 }
 
 MainWindow::~MainWindow()
