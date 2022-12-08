@@ -184,7 +184,8 @@ void EventEdit::saveEvent()
     this->event->setPath(ui->urlPath->text());
     this->event->setDays(getSelectedDays());
     this->event->setTime(ui->timeEdit->text());
-
+    QString eventName = (ui->eventName->text().isEmpty()) ? "event" : ui->eventName->text();
+    this->event->setName(eventName);
     qDebug() << "saving event...";
     writeFormattedEventToFile();
 

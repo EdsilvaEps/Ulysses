@@ -10,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->time = new QDateTime();
     //this->time->currentDateTime().date().dayOfWeek();
 
-    // ------------- TODO: everything below should have its own class (adapter) -------------------
-    // ------------------- create a mock element on the list --------------------------------------
     // creating new generic list item
     //QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
 
@@ -27,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     // finally, adding the item widget to the list
     //ui->listWidget->setItemWidget(listWidgetItem, testItemWidgetItem);
 
-    QList<Event> events = this->getEvents(); // TODO: use this function to populate the widget list
+    QList<Event> events = this->getEvents();
     qDebug() << "Number of events to populate: " << events.size();
 
     for(Event event : events){
@@ -84,6 +82,7 @@ QList<Event> MainWindow::getEvents()
             }
 
            Event ev = Event(id, path, type, time, days);
+           ev.setName(name);
            eventsList.append(ev);
         }
     }
@@ -93,7 +92,7 @@ QList<Event> MainWindow::getEvents()
 
 }
 
-void MainWindow::populateList(QString sourcePath)
+void MainWindow::populateList(QString sourcePath) // TODO: This should be changed to "updateList" and called after eventedit
 {
 
 }

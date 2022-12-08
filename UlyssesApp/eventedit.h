@@ -24,8 +24,6 @@ public:
 
     static QJsonArray *getEventsJsonArray(); // returns events as a json array
 
-    //static QList<Event> *getEvents(); // get all the registered events in a nice list of Event objects
-
     static const inline QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json";
 
 private slots:

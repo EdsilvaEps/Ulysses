@@ -7,6 +7,7 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
 {
     ui->setupUi(this);
     ui->timelabel->setText(event->time());
+    ui->namelabel->setText(event->name());
 
     QString type = (event->type() == Type::type::link) ? "link" : "exe";
     ui->typelabel->setText(type);
