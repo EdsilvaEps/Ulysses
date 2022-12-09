@@ -49,6 +49,9 @@ void MainWindow::on_addEventBtn_clicked()
 {
     // open event creation dialog
     EventEdit * dialog = new EventEdit(this);
+    connect(dialog, &EventEdit::accepted, [=]() {
+        this->updateList();
+    });
     dialog->exec();
 
 }
@@ -92,8 +95,26 @@ QList<Event> MainWindow::getEvents()
 
 }
 
-void MainWindow::populateList(QString sourcePath) // TODO: This should be changed to "updateList" and called after eventedit
+void MainWindow::populateList() // TODO: This should be changed to "updateList" and called after eventedit
 {
+    QList<Event> events = this->getEvents();
+    qDebug() << "Number of events to populate: " << events.size();
+
+    for(Event event : events){
+        QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
+        ui->listWidget->addItem(listWidgetItem);
+        ListItemWidget *customWidgetItem = new ListItemWidget(ui->listWidget,&event);
+        listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
+        ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
+
+    }
+
+}
+
+void MainWindow::updateList()
+{
+    ui->listWidget->clear();
+    this->populateList();
 
 }
 

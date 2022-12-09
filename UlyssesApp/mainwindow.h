@@ -27,7 +27,8 @@ private:
     Ui::MainWindow *ui;
     QDateTime *time;
 
-    void populateList(QString sourcePath); // gets the file where events are written and loads them into the UI list
+    void populateList(); // gets the file where events are written and loads them into the UI list
+    void updateList();
     QList<Event> getEvents();
 };
 #endif // MAINWINDOW_H
