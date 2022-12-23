@@ -48,7 +48,7 @@ private:
     QList<Qt::DayOfWeek> getSelectedDays();
     bool fieldsValid();
     void writeFormattedEventToFile();
-    int getNextValidId(); // TODO: Finish this function -> it checks whats the next id available for event
+    int getNextValidId();
     bool isFileEmpty();
 };
 

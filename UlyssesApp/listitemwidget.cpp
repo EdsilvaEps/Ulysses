@@ -6,15 +6,17 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
     QWidget(parent),
     ui(new Ui::ListItemWidget)
 {
+    this->event = *event;
+    qDebug() << "getting ahold of event " << this->event.id();
     ui->setupUi(this);
-    ui->timelabel->setText(event->time());
-    ui->namelabel->setText(event->name());
+    ui->timelabel->setText(this->event.time());
+    ui->namelabel->setText(this->event.name());
 
-    QString type = (event->type() == Type::type::link) ? "link" : "exe";
+    QString type = (this->event.type() == Type::type::link) ? "link" : "exe";
     ui->typelabel->setText(type);
 
     QString dayStr = "";
-    for(Qt::DayOfWeek day : event->days()){
+    for(Qt::DayOfWeek day : this->event.days()){
         if(day == Qt::Monday) dayStr += "Mon ";
         if(day == Qt::Tuesday) dayStr += "Tue ";
         if(day == Qt::Wednesday) dayStr += "Wed ";
@@ -36,11 +38,17 @@ ListItemWidget::~ListItemWidget()
 void ListItemWidget::on_removeItem_clicked()
 {
     qDebug() << "deleting event";
-    qDebug() << "removing event "  << this->event->id();
+    qDebug() << "removing event "  << this->event.id();
     QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json"; // TODO: put this properly somewhere
-    //EventHandler evHandler = EventHandler(eventsFile);
-    //evHandler.removeEvent(event->id());
-    //emit eventsChanged();
+    EventHandler evHandler = EventHandler(eventsFile);
+    try {
+        evHandler.removeEvent(event.id());
+        emit eventsChanged();
+    } catch (...) {
+        // TODO: add error catching here
+    }
+
+
 
 
 }

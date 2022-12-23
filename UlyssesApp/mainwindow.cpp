@@ -10,24 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->time = new QDateTime();
     this->updateVisualDate();
-
-
-
-    QList<Event> events = this->getEvents();
-    qDebug() << "Number of events to populate: " << events.size();
-    //    connect(adb, &AdbManager::foundDevice, this, &MainWindow::on_device_found);
-
-    for(Event event : events){
-        QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
-        ui->listWidget->addItem(listWidgetItem);
-        ListItemWidget *customWidgetItem = new ListItemWidget(ui->listWidget,&event);
-        listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
-        ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
-        //connect(customWidgetItem, &ListItemWidget::eventsChanged, this, &MainWindow::on_events_updated);
-
-        // if this is the first element, then select it
-        if(ui->listWidget->count() == 1) ui->listWidget->setCurrentItem(listWidgetItem);
-    }
+    this->populateList();
 }
 
 MainWindow::~MainWindow()
@@ -98,6 +81,10 @@ void MainWindow::populateList()
         listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
         ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
 
+        connect(customWidgetItem, &ListItemWidget::eventsChanged, this, &MainWindow::on_events_updated);
+
+        // if this is the first element, then select it
+        if(ui->listWidget->count() == 1) ui->listWidget->setCurrentItem(listWidgetItem);
     }
 
 }
@@ -126,8 +113,8 @@ void MainWindow::on_removeEventBtn_clicked()
 
 }
 
-//void MainWindow::on_events_updated()
-//{
-//    this->updateList();
-//}
+void MainWindow::on_events_updated()
+{
+    this->updateList();
+}
 

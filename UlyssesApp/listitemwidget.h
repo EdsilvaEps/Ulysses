@@ -26,7 +26,7 @@ private slots:
 
 private:
     Ui::ListItemWidget *ui;
-    Event *event; // object that constitutes the data of this element
+    Event event; // object that constitutes the data of this element
 };
 
 #endif // LISTITEMWIDGET_H

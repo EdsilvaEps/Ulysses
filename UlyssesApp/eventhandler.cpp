@@ -29,7 +29,7 @@ void EventHandler::writeEventsToFile(QJsonArray eventsArray)
 {
     QFile file(this->eventsFile);
     QJsonDocument eventsDoc(eventsArray);
-    if (file.open(QIODevice::ReadWrite)) {
+    if (file.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         QTextStream stream(&file);
 
         stream << QString(eventsDoc.toJson()) << Qt::endl;
@@ -51,7 +51,6 @@ bool EventHandler::removeEvent(int id)
         //QJsonObject temp = val.toObject();
         QJsonValue val = temp.toObject().value("id");
         int objId = val.toInt(-1);
-        qDebug() << "verifying obj " << objId;
 
         if(id == objId){
             eventsInJson->removeAt(i);
