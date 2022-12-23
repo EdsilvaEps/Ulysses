@@ -1,5 +1,6 @@
 #include "listitemwidget.h"
 #include "ui_listitemwidget.h"
+#include "eventhandler.h"
 
 ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
     QWidget(parent),
@@ -30,4 +31,16 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
 ListItemWidget::~ListItemWidget()
 {
     delete ui;
+}
+
+void ListItemWidget::on_removeItem_clicked()
+{
+    qDebug() << "deleting event";
+    qDebug() << "removing event "  << this->event->id();
+    QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json"; // TODO: put this properly somewhere
+    //EventHandler evHandler = EventHandler(eventsFile);
+    //evHandler.removeEvent(event->id());
+    //emit eventsChanged();
+
+
 }

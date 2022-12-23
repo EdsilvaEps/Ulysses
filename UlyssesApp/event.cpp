@@ -46,6 +46,8 @@ Event::Event(int id, QString path, Type::type type, QString time, QList<Qt::DayO
     this->_time = time;
     this->_days = days;
 
+    qDebug() << "event created " << id;
+
     //TODO: prevent wrong types here
     //TODO: also processing paths is gonna be necessary
 
@@ -90,6 +92,11 @@ const QList<Qt::DayOfWeek> &Event::days() const
 void Event::setDays(const QList<Qt::DayOfWeek> &newDays)
 {
     _days = newDays;
+}
+
+const int &Event::id() const
+{
+    return _id;
 }
 
 /*void Event::launch()

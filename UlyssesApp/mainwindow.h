@@ -23,12 +23,17 @@ public:
 private slots:
     void on_addEventBtn_clicked();
 
+    void on_removeEventBtn_clicked();
+
+    //void on_events_updated();
+
 private:
     Ui::MainWindow *ui;
     QDateTime *time;
 
     void populateList(); // gets the file where events are written and loads them into the UI list
     void updateList();
+    void updateVisualDate();
     QList<Event> getEvents();
 };
 #endif // MAINWINDOW_H

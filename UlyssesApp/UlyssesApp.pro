@@ -11,6 +11,7 @@ CONFIG += c++14
 SOURCES += \
     event.cpp \
     eventedit.cpp \
+    eventhandler.cpp \
     listitemwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     event.h \
     eventedit.h \
+    eventhandler.h \
     listitemwidget.h \
     mainwindow.h \
     type.h

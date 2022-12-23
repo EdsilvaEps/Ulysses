@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_listitemwidget.h"
+#include "eventhandler.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -8,25 +9,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->time = new QDateTime();
-    //this->time->currentDateTime().date().dayOfWeek();
+    this->updateVisualDate();
 
-    // creating new generic list item
-    //QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
 
-    // adding item to list widget
-    //ui->listWidget->addItem(listWidgetItem);
-
-    // creating an object of our custom list item widget
-    //ListItemWidget *testItemWidgetItem = new ListItemWidget;
-
-    // making sure that the generic list item is the same size as the custom item widget
-    //listWidgetItem->setSizeHint(testItemWidgetItem->sizeHint());
-
-    // finally, adding the item widget to the list
-    //ui->listWidget->setItemWidget(listWidgetItem, testItemWidgetItem);
 
     QList<Event> events = this->getEvents();
     qDebug() << "Number of events to populate: " << events.size();
+    //    connect(adb, &AdbManager::foundDevice, this, &MainWindow::on_device_found);
 
     for(Event event : events){
         QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
@@ -34,9 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
         ListItemWidget *customWidgetItem = new ListItemWidget(ui->listWidget,&event);
         listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
         ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
+        //connect(customWidgetItem, &ListItemWidget::eventsChanged, this, &MainWindow::on_events_updated);
 
+        // if this is the first element, then select it
+        if(ui->listWidget->count() == 1) ui->listWidget->setCurrentItem(listWidgetItem);
     }
-
 }
 
 MainWindow::~MainWindow()
@@ -60,7 +51,7 @@ QList<Event> MainWindow::getEvents()
 {
     QList<Event> eventsList;
     QJsonArray *eventsInJson;
-    eventsInJson = EventEdit::getEventsJsonArray();
+    eventsInJson = EventEdit::getEventsJsonArray(); // TODO: replace this with EventHandler's call of same name
 
     if(!eventsInJson->empty()){
         qDebug() << "getEvents()::Processing list of events...";
@@ -95,7 +86,7 @@ QList<Event> MainWindow::getEvents()
 
 }
 
-void MainWindow::populateList() // TODO: This should be changed to "updateList" and called after eventedit
+void MainWindow::populateList()
 {
     QList<Event> events = this->getEvents();
     qDebug() << "Number of events to populate: " << events.size();
@@ -118,5 +109,25 @@ void MainWindow::updateList()
 
 }
 
+void MainWindow::updateVisualDate()
+{
+    QLocale::setDefault(QLocale("en_US"));
+    ui->date->setText( QLocale().toString( QDate::currentDate() ));
 
+}
+
+
+void MainWindow::on_removeEventBtn_clicked()
+{
+    //QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json"; // TODO: put this properly somewhere
+    //int id = ui->listWidget->currentItem()->
+    //ui->listWidget->currentItem();
+    //EventHandler evHandler = EventHandler(eventsFile);
+
+}
+
+//void MainWindow::on_events_updated()
+//{
+//    this->updateList();
+//}
 

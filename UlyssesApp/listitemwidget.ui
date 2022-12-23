@@ -39,27 +39,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="2">
-      <widget class="QLabel" name="typelabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Unknown</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="namelabel">
        <property name="sizePolicy">
@@ -75,6 +54,33 @@
        </property>
        <property name="text">
         <string>Event Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QToolButton" name="settingsbtn">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="document-properties">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QToolButton" name="removeItem">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="user-trash"/>
        </property>
       </widget>
      </item>
@@ -108,17 +114,24 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QToolButton" name="settingsbtn">
-       <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
+     <item row="1" column="2" colspan="2">
+      <widget class="QLabel" name="typelabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
        </property>
        <property name="text">
-        <string>...</string>
+        <string>Unknown</string>
        </property>
-       <property name="icon">
-        <iconset theme="document-properties">
-         <normaloff>.</normaloff>.</iconset>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

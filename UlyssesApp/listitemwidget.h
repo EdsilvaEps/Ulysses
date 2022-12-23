@@ -2,6 +2,7 @@
 #define LISTITEMWIDGET_H
 
 #include <QWidget>
+#include <QPushButton>
 #include "event.h"
 
 namespace Ui {
@@ -15,6 +16,13 @@ class ListItemWidget : public QWidget
 public:
     explicit ListItemWidget(QWidget *parent = nullptr, Event *event = new Event());
     ~ListItemWidget();
+
+signals:
+    void eventsChanged();
+
+private slots:
+    void on_removeItem_clicked();
+
 
 private:
     Ui::ListItemWidget *ui;
