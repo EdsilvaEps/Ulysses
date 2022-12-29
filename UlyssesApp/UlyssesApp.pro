@@ -12,6 +12,7 @@ SOURCES += \
     event.cpp \
     eventedit.cpp \
     eventhandler.cpp \
+    executionmanager.cpp \
     listitemwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -21,6 +22,7 @@ HEADERS += \
     event.h \
     eventedit.h \
     eventhandler.h \
+    executionmanager.h \
     listitemwidget.h \
     mainwindow.h \
     type.h

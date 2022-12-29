@@ -7,7 +7,6 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
     ui(new Ui::ListItemWidget)
 {
     this->event = *event;
-    qDebug() << "getting ahold of event " << this->event.id();
     ui->setupUi(this);
     ui->timelabel->setText(this->event.time());
     ui->namelabel->setText(this->event.name());
@@ -37,7 +36,6 @@ ListItemWidget::~ListItemWidget()
 
 void ListItemWidget::on_removeItem_clicked()
 {
-    qDebug() << "deleting event";
     qDebug() << "removing event "  << this->event.id();
     QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json"; // TODO: put this properly somewhere
     EventHandler evHandler = EventHandler(eventsFile);
