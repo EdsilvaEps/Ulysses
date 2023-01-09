@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include "event.h"
+#include "executionmanager.h"
 
 namespace Ui {
 class ListItemWidget;
@@ -22,6 +23,7 @@ signals:
 
 private slots:
     void on_removeItem_clicked();
+    void on_toolButton_clicked(); // run button action
 
 
 private:

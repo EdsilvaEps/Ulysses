@@ -1,21 +1,25 @@
 #ifndef EXECUTIONMANAGER_H
 #define EXECUTIONMANAGER_H
 
-#include <QObject>
+//#include <QObject>
 #include "type.h"
+#include <QDesktopServices>
+#include <QUrl>
+#include <QProcess>
+
 
 class ExecutionManager
 {
-    Q_OBJECT
+//    Q_OBJECT
 public:
     ExecutionManager();
 
-    void run(QString path, Type::type type);
+    static void run(QString path, Type::type type);
 
 private:
 
-    void openBrowser(QString link);
-    void executeProgram(QString path);
+    static void openBrowser(QString link);
+    static void executeProgram(QString path);
 };
 
 #endif // EXECUTIONMANAGER_H

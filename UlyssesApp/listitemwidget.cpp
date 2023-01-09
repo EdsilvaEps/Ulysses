@@ -50,3 +50,8 @@ void ListItemWidget::on_removeItem_clicked()
 
 
 }
+
+void ListItemWidget::on_toolButton_clicked()
+{
+    ExecutionManager::run(this->event.path(), this->event.type());
+}

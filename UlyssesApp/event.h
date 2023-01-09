@@ -2,9 +2,6 @@
 #define EVENT_H
 
 //#include <QObject>
-#include <QDesktopServices>
-#include <QUrl>
-#include <QProcess>
 #include <QDateTime>
 #include <QJsonDocument>
 #include <QJsonObject>
