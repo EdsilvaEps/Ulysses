@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 #include "event.h"
 
 namespace Ui {
@@ -24,7 +25,13 @@ public:
 
     static QJsonArray *getEventsJsonArray(); // returns events as a json array
 
-    static const inline QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json";
+    static const inline QString eventsFilePath = "/home/edson/Documents/ulysses_conf/";
+
+    static const inline QString eventsFileName = "testfile.json";
+
+    static const inline QString eventsFile = eventsFilePath + eventsFileName;
+
+    static void createEmptyConfFile(); // creates the empty conf file at the location determined by "eventsFile" property
 
 private slots:
 
@@ -50,6 +57,7 @@ private:
     void writeFormattedEventToFile();
     int getNextValidId();
     bool isFileEmpty();
+
 };
 
 

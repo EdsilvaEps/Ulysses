@@ -42,6 +42,7 @@ QJsonArray *EventEdit::getEventsJsonArray()
         val = file.readAll();
     }
     else throw std::runtime_error("could not open file");
+
     file.close();
 
     QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
@@ -158,7 +159,15 @@ void EventEdit::writeFormattedEventToFile()
         return;
     }
 
-    QJsonArray *events = this->getEventsJsonArray();
+    QJsonArray *events;
+    try {
+        events = this->getEventsJsonArray();
+    } catch (std::runtime_error const& e) {
+        qDebug() << "configuration file does not exist, creating...";
+        this->createEmptyConfFile();
+        events = this->getEventsJsonArray();
+    }
+
     events->push_back(this->event->getAsJsonObj());
     QJsonDocument eventsDoc(*events);
     if (file.open(QIODevice::ReadWrite)) {
@@ -208,6 +217,23 @@ bool EventEdit::isFileEmpty(){
     QFile file(filename);
     if(file.size() > 0) return false;
     return true;
+}
+
+void EventEdit::createEmptyConfFile()
+{
+
+    QDir *dir = new QDir();
+    if(dir->mkpath(EventEdit::eventsFilePath)){
+        qDebug() << "path to file created";
+        QString filename = EventEdit::eventsFile;
+        QFile file(filename);
+        file.open(QIODevice::ReadWrite);
+        file.close();
+        return;
+    }
+
+    qDebug() << "could not create file path";
+
 }
 
 
