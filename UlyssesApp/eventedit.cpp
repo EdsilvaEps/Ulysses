@@ -4,32 +4,57 @@
 #include <QFileDialog>
 #include "event.h"
 
-EventEdit::EventEdit(QWidget *parent) :
+EventEdit::EventEdit(QWidget *parent, int eventID) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    this->_isNewEvent = true; // TODO: get this as parameters from parent screen
-    this->event = new Event();
 
-    ui->linkTypeSelection->setChecked(true);
-    ui->browseBtn->setDisabled(true);
-    this->event->setType(Type::link);
+    evHandler = new EventHandler(this->eventsFile);
+
+    // in case of no valid eventID supplied
+    if(eventID < 0){
+        this->_isNewEvent = true;
+        this->event = new Event();
+        this->event->setType(Type::link);
+        ui->linkTypeSelection->setChecked(true);
+        ui->browseBtn->setDisabled(true);
+
+
+    } else{ // set the event edit screen with the data of the selected event
+
+        this->event = evHandler->getEvent(eventID);
+        qDebug() << "editting event: " << this->event->name();
+
+        ui->eventName->setText(this->event->name());
+        if(this->event->type() == Type::type::link){
+            ui->linkTypeSelection->setChecked(true);
+            ui->browseBtn->setDisabled(true);
+        } else{
+            ui->exeTypeSelection->setChecked(true);
+            ui->browseBtn->setDisabled(false);
+        }
+
+        ui->urlPath->setText(this->event->path());
+        ui->timeEdit->setTime(QDateTime::fromString(this->event->time(),"HH:mm").time());
+
+        for(Qt::DayOfWeek day: this->event->days()){
+            if(day == Qt::DayOfWeek::Monday) ui->monSelection->setCheckState(Qt::Checked);
+            if(day == Qt::DayOfWeek::Tuesday) ui->tueSelection->setCheckState(Qt::Checked);
+            if(day == Qt::DayOfWeek::Wednesday) ui->wedSelection->setCheckState(Qt::Checked);
+            if(day == Qt::DayOfWeek::Thursday) ui->thuSelection->setCheckState(Qt::Checked);
+            if(day == Qt::DayOfWeek::Friday) ui->friSelection->setCheckState(Qt::Checked);
+            if(day == Qt::DayOfWeek::Saturday) ui->satSelection->setCheckState(Qt::Checked);
+            if(day == Qt::DayOfWeek::Sunday) ui->sunSelection->setCheckState(Qt::Checked);
+        }
+
+    }
 
 }
 
 EventEdit::~EventEdit()
 {
     delete ui;
-}
-
-void EventEdit::removeEvent(int id)
-{
-    // logic for removing event from json file
-    // basically getting the list, removing event from the list and then overwriting the file
-    // with new list
-    return;
-
 }
 
 QJsonArray *EventEdit::getEventsJsonArray()
@@ -81,7 +106,6 @@ void EventEdit::on_submitBox_clicked(QAbstractButton *button)
 
     if(ret == QMessageBox::Ok){
         if(this->_isNewEvent){
-
             this->saveEvent();
         } else this->modifyEvent();
         accept();
@@ -186,15 +210,21 @@ int EventEdit::getNextValidId()
     return this->getEventsJsonArray()->size();
 }
 
+Event *EventEdit::getEventData(){
+    Event *ev = new Event();
+    ev->setId(this->getNextValidId());
+    ev->setPath(ui->urlPath->text());
+    ev->setDays(getSelectedDays());
+    ev->setTime(ui->timeEdit->text());
+    QString eventName = (ui->eventName->text().isEmpty()) ? "event" : ui->eventName->text();
+    ev->setName(eventName);
+
+    return ev;
+}
 
 void EventEdit::saveEvent()
 {
-    this->event->setId(this->getNextValidId());
-    this->event->setPath(ui->urlPath->text());
-    this->event->setDays(getSelectedDays());
-    this->event->setTime(ui->timeEdit->text());
-    QString eventName = (ui->eventName->text().isEmpty()) ? "event" : ui->eventName->text();
-    this->event->setName(eventName);
+    this->event = this->getEventData();
     qDebug() << "saving event...";
     writeFormattedEventToFile();
 
@@ -209,6 +239,9 @@ void EventEdit::loadEvent()
 void EventEdit::modifyEvent()
 {
     qDebug() << "Modifying event...";
+    this->event = this->getEventData();
+    evHandler->updateEvent(this->event->id(), *this->event);
+
 }
 
 bool EventEdit::isFileEmpty(){

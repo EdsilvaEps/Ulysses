@@ -24,7 +24,8 @@ public:
     EventHandler(QString events_file);
     bool writeEvent(Event ev);
     QList<Event> getEvents();
-    bool updateEvent(Event ev, int id);
+    Event *getEvent(int eventId);
+    bool updateEvent(int id, Event ev);
     bool removeEvent(int id);
 };
 
