@@ -6,7 +6,9 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 #include "event.h"
+#include "eventhandler.h"
 
 namespace Ui {
 class Dialog;
@@ -17,14 +19,18 @@ class EventEdit : public QDialog
     Q_OBJECT
 
 public:
-    explicit EventEdit(QWidget *parent = nullptr);
+    explicit EventEdit(QWidget *parent = nullptr, int eventID = -1);
     ~EventEdit();
-
-    static void removeEvent(int id); // TODO: finish this function -> it should be possible to remove an event from the main list screen
 
     static QJsonArray *getEventsJsonArray(); // returns events as a json array
 
-    static const inline QString eventsFile = "/home/edson/Documents/ulysses_conf/testfile.json";
+    static const inline QString eventsFilePath = "/home/edson/Documents/ulysses_conf/";
+
+    static const inline QString eventsFileName = "testfile.json";
+
+    static const inline QString eventsFile = eventsFilePath + eventsFileName;
+
+    static void createEmptyConfFile(); // creates the empty conf file at the location determined by "eventsFile" property
 
 private slots:
 
@@ -40,6 +46,7 @@ private slots:
 private:
     Ui::Dialog *ui;
     Event *event;
+    EventHandler *evHandler;
     bool _isNewEvent; // variable provide from parent
 
     void saveEvent();
@@ -50,6 +57,7 @@ private:
     void writeFormattedEventToFile();
     int getNextValidId();
     bool isFileEmpty();
+    Event *getEventData(); // return pointer to event obj with all the event informations in the page
 };
 
 

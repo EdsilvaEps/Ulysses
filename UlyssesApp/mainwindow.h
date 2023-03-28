@@ -25,7 +25,7 @@ private slots:
 
     void on_removeEventBtn_clicked();
 
-    void on_events_updated();
+    void on_eventsUpdated();
 
 private:
     Ui::MainWindow *ui;

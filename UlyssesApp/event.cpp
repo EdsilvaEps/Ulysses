@@ -99,21 +99,7 @@ const int &Event::id() const
     return _id;
 }
 
-/*void Event::launch()
-{
-    // TODO: this all should be handled by a daemon
-    if(this->_type == Type::type::link){
-        QDesktopServices::openUrl(QUrl(this->_path, QUrl::TolerantMode));
-        // add helper to tell if the link cannot be opened
 
-    }
-
-    if(this->_type == Type::type::exe){
-        QProcess *process = new QProcess(this);
-        process->start(this->_path);
-    }
-
-}*/
 
 bool Event::launchTime()
 {
