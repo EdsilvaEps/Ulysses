@@ -23,6 +23,7 @@ EventEdit::EventEdit(QWidget *parent, int eventID) :
 
     } else{ // set the event edit screen with the data of the selected event
 
+        this->_isNewEvent = false;
         this->event = evHandler->getEvent(eventID);
         qDebug() << "editting event: " << this->event->name();
 
@@ -212,7 +213,9 @@ int EventEdit::getNextValidId()
 
 Event *EventEdit::getEventData(){
     Event *ev = new Event();
-    ev->setId(this->getNextValidId());
+    ev->setId(this->event->id());
+    if(this->_isNewEvent)
+        ev->setId(this->getNextValidId());
     ev->setPath(ui->urlPath->text());
     ev->setDays(getSelectedDays());
     ev->setTime(ui->timeEdit->text());
@@ -240,7 +243,11 @@ void EventEdit::modifyEvent()
 {
     qDebug() << "Modifying event...";
     this->event = this->getEventData();
-    evHandler->updateEvent(this->event->id(), *this->event);
+    if(evHandler->updateEvent(this->event->id(), *this->event)){
+        qDebug() << "event successfully modified";
+        return;
+    }
+    qDebug() << "failed to modify event";
 
 }
 

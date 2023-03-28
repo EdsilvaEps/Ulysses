@@ -60,7 +60,6 @@ Event *EventHandler::getEvent(int eventId)
 
 bool EventHandler::updateEvent(int eventToEditID, Event newEvent)
 {
-// TODO: create functionality in eventEdit to open in edit mode
     QJsonArray *events;
     try {
      events = this->getEventsJsonArray();
@@ -77,9 +76,9 @@ bool EventHandler::updateEvent(int eventToEditID, Event newEvent)
 
         if(eventToEditID == objId){
             events->replace(i, newEvent.getAsJsonObj());
-            break;
+            this->writeEventsToFile(*events);
+            return true;
         }
-        return true;
 
     }
     return false;
