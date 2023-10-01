@@ -17,10 +17,8 @@ class EventEdit : public QDialog
     Q_OBJECT
 
 public:
-    explicit EventEdit(QWidget *parent = nullptr);
+    explicit EventEdit(QWidget *parent = nullptr, int id = -1);
     ~EventEdit();
-
-    static void removeEvent(int id); // TODO: finish this function -> it should be possible to remove an event from the main list screen
 
     static QJsonArray *getEventsJsonArray(); // returns events as a json array
 

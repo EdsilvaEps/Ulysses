@@ -4,7 +4,7 @@
 #include <QFileDialog>
 #include "event.h"
 
-EventEdit::EventEdit(QWidget *parent) :
+EventEdit::EventEdit(QWidget *parent, int id) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
@@ -21,15 +21,6 @@ EventEdit::EventEdit(QWidget *parent) :
 EventEdit::~EventEdit()
 {
     delete ui;
-}
-
-void EventEdit::removeEvent(int id)
-{
-    // logic for removing event from json file
-    // basically getting the list, removing event from the list and then overwriting the file
-    // with new list
-    return;
-
 }
 
 QJsonArray *EventEdit::getEventsJsonArray()

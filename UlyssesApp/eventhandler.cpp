@@ -6,6 +6,30 @@ EventHandler::EventHandler(QString events_file)
 
 }
 
+bool EventHandler::updateEvent(Event ev, int id)
+{
+    bool modified = false;
+    QJsonArray *eventsInJson;
+    eventsInJson = this->getEventsJsonArray();
+
+    for(int i = 0; i < eventsInJson->count(); i++){
+        QJsonValue temp = eventsInJson->at(i);
+        //QJsonObject temp = val.toObject();
+        QJsonValue val = temp.toObject().value("id");
+        int objId = val.toInt(-1);
+
+        if(id == objId){
+            eventsInJson->replace(i, ev.getAsJsonObj());
+            modified = true;
+            break;
+        }
+
+    }
+    this->writeEventsToFile(*eventsInJson);
+    return modified;
+
+}
+
 QJsonArray *EventHandler::getEventsJsonArray()
 {
     QJsonArray *events = new QJsonArray;
