@@ -6,6 +6,59 @@ EventHandler::EventHandler(QString events_file)
 
 }
 
+Event *EventHandler::getEvent(int eventId){
+    QJsonArray *events;
+    Event *event = new Event();
+    try {
+     events = this->getEventsJsonArray();
+    } catch (std::runtime_error const& e) {
+        qDebug() << "could not open config file" ;
+        return NULL;
+    }
+
+
+    for(int i = 0; i < events->count(); i++){
+        QJsonValue temp = events->at(i);
+        //QJsonObject temp = val.toObject();
+        QJsonValue val = temp.toObject().value("id");
+        int objId = val.toInt(-1);
+
+        if(eventId == objId){
+
+            QJsonObject obj = temp.toObject();
+            int id = obj["id"].toInt();
+            QString name = obj["name"].toString();
+            QString path = obj["path"].toString();
+            QString time = obj["time"].toString();
+            Type::type type = (obj["type"].toString() == "link") ? Type::link : Type::exe;
+            QList<Qt::DayOfWeek> days;
+
+            for(int i=0; i< obj["days"].toArray().count(); ++i){
+                QString str = obj["days"].toArray().at(i).toString();
+                if(str == "Monday") days.append(Qt::Monday);
+                if(str == "Tuesday") days.append(Qt::Tuesday);
+                if(str == "Wednesday") days.append(Qt::Wednesday);
+                if(str == "Thursday") days.append(Qt::Thursday);
+                if(str == "Friday") days.append(Qt::Friday);
+                if(str == "Saturday") days.append(Qt::Saturday);
+                if(str == "Sunday") days.append(Qt::Sunday);
+            }
+
+           event->setId(id);
+           event->setPath(path);
+           event->setType(type);
+           event->setTime(time);
+           event->setDays(days);
+           event->setName(name);
+           break;
+        }
+    }
+    return event;
+
+}
+
+
+
 bool EventHandler::updateEvent(Event ev, int id)
 {
     bool modified = false;
@@ -29,6 +82,31 @@ bool EventHandler::updateEvent(Event ev, int id)
     return modified;
 
 
+}
+
+bool EventHandler::updateEvent(int eventToEditID, Event newEvent)
+{
+    QJsonArray *events;
+    try {
+     events = this->getEventsJsonArray();
+    } catch (std::runtime_error const& e) {
+        qDebug() << "could not open config file" ;
+        return false;
+    }
+
+    for(int i = 0; i < events->count(); i++){
+        QJsonValue temp = events->at(i);
+        //QJsonObject temp = val.toObject();
+        QJsonValue val = temp.toObject().value("id");
+        int objId = val.toInt(-1);
+        if(eventToEditID == objId){
+            events->replace(i, newEvent.getAsJsonObj());
+            this->writeEventsToFile(*events);
+            return true;
+        }
+
+    }
+    return false;
 }
 
 QJsonArray *EventHandler::getEventsJsonArray()
