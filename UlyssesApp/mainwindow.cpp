@@ -34,7 +34,13 @@ QList<Event> MainWindow::getEvents()
 {
     QList<Event> eventsList;
     QJsonArray *eventsInJson;
-    eventsInJson = EventEdit::getEventsJsonArray(); // TODO: replace this with EventHandler's call of same name
+    try {
+     eventsInJson = EventEdit::getEventsJsonArray(); // TODO: replace this with EventHandler's call of same name
+    } catch (std::runtime_error const& e) {
+        qDebug() << "config file does not exist, creating...";
+        EventEdit::createEmptyConfFile();
+
+    }
 
     if(!eventsInJson->empty()){
         qDebug() << "getEvents()::Processing list of events...";
@@ -81,7 +87,7 @@ void MainWindow::populateList()
         listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
         ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
 
-        connect(customWidgetItem, &ListItemWidget::eventsChanged, this, &MainWindow::on_events_updated);
+        connect(customWidgetItem, &ListItemWidget::eventsChanged, this, &MainWindow::on_eventsUpdated);
 
         // if this is the first element, then select it
         if(ui->listWidget->count() == 1) ui->listWidget->setCurrentItem(listWidgetItem);
@@ -113,7 +119,7 @@ void MainWindow::on_removeEventBtn_clicked()
 
 }
 
-void MainWindow::on_events_updated()
+void MainWindow::on_eventsUpdated()
 {
     this->updateList();
 }

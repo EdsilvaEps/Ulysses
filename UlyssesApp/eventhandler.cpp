@@ -28,6 +28,7 @@ bool EventHandler::updateEvent(Event ev, int id)
     this->writeEventsToFile(*eventsInJson);
     return modified;
 
+
 }
 
 QJsonArray *EventHandler::getEventsJsonArray()

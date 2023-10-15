@@ -46,12 +46,21 @@ void ListItemWidget::on_removeItem_clicked()
         // TODO: add error catching here
     }
 
-
-
-
 }
 
 void ListItemWidget::on_toolButton_clicked()
 {
     ExecutionManager::run(this->event.path(), this->event.type());
 }
+
+void ListItemWidget::on_settingsbtn_clicked()
+{
+    // open event creation dialog with parameter for event edition
+    qDebug() << "Editting event";
+    EventEdit * dialog = new EventEdit(this, this->event.id());
+    connect(dialog, &EventEdit::accepted, [=]() {
+        emit eventsChanged();
+    });
+    dialog->exec();
+}
+
