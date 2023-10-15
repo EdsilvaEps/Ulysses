@@ -11,7 +11,8 @@ public:
 
     enum type {
         link,
-        exe
+        exe,
+        script
     };
     Q_ENUM(type);
 

@@ -122,6 +122,7 @@ QJsonObject Event::getAsJsonObj(){
     eventObj.insert("name", this->_name);
     if(this->_type == Type::exe) eventObj.insert("type", "exe");
     if(this->_type == Type::link) eventObj.insert("type", "link");
+    if(this->_type == Type::script) eventObj.insert("type","script");
     eventObj.insert("time", this->_time);
     eventObj.insert("path", this->_path);
 
