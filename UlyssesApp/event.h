@@ -14,14 +14,14 @@ private:
     int _id;
     QString _name;
     QString _path;
-    Type::type _type;
+    Type _type;
     QString _time;
     QList<Qt::DayOfWeek> _days;
 
 public:
     //explicit Event(QObject *parent = nullptr);
 
-    Event(int id, QString path, Type::type type, QString time, QList<Qt::DayOfWeek> days);
+    Event(int id, QString path, Type type, QString time, QList<Qt::DayOfWeek> days);
 
     Event();
 
@@ -34,8 +34,8 @@ public:
     const QString &path() const;
     void setPath(const QString &newPath);
 
-    const Type::type &type() const;
-    void setType(const Type::type &newType);
+    const Type &type() const;
+    void setType(const Type &newType);
 
     const QString &time() const;
     void setTime(const QString &newTime);

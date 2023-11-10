@@ -14,7 +14,7 @@ class ExecutionManager
 public:
     ExecutionManager();
 
-    static void run(QString path, Type::type type);
+    static void run(QString path, Type type);
 
 private:
 

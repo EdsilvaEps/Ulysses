@@ -1,21 +1,5 @@
 #include "event.h"
 
-/*#include <sstream>
-#include <chrono>
-#include <iomanip>
-
-using std::chrono::system_clock;
-
-namespace {
-    system_clock::time_point getTimePoint(QString time) {
-        std::tm myTm = {};
-        std::stringstream ss(time.toStdString().c_str());
-        ss >> std::get_time(&myTm, "%H:%M");
-        return system_clock::from_time_t(std::mktime(&myTm));
-
-    }
-} */
-
 
 const QString &Event::name() const
 {
@@ -33,12 +17,12 @@ void Event::setId(int newId)
 }
 
 Event::Event():
-    _id(-1), _name("event"), _path(""), _type(Type::link), _time("00:00"), _days(QList<Qt::DayOfWeek>())
+    _id(-1), _name("event"), _path(""), _type(Type::type_en::exe), _time("00:00"), _days(QList<Qt::DayOfWeek>())
 {
 
 }
 
-Event::Event(int id, QString path, Type::type type, QString time, QList<Qt::DayOfWeek> days)
+Event::Event(int id, QString path, Type type, QString time, QList<Qt::DayOfWeek> days)
 {
     this->_id = id;
     this->_path = path;
@@ -64,12 +48,12 @@ void Event::setPath(const QString &newPath)
     _path = newPath;
 }
 
-const Type::type &Event::type() const
+const Type &Event::type() const
 {
     return _type;
 }
 
-void Event::setType(const Type::type &newType)
+void Event::setType(const Type &newType)
 {
     _type = newType;
 }
@@ -120,9 +104,7 @@ QJsonObject Event::getAsJsonObj(){
     QJsonObject eventObj;
     eventObj.insert("id", this->_id);
     eventObj.insert("name", this->_name);
-    if(this->_type == Type::exe) eventObj.insert("type", "exe");
-    if(this->_type == Type::link) eventObj.insert("type", "link");
-    if(this->_type == Type::script) eventObj.insert("type","script");
+    eventObj.insert("type", this->_type.toString());
     eventObj.insert("time", this->_time);
     eventObj.insert("path", this->_path);
 

@@ -6,13 +6,13 @@ ExecutionManager::ExecutionManager()
 
 }
 
-void ExecutionManager::run(QString path, Type::type type)
+void ExecutionManager::run(QString path, Type type)
 {
-    if(type == Type::type::link){
+    if(type == Type::type_en::link){
         openBrowser(path);
     }
 
-    if(type == Type::type::exe){
+    if(type == Type::type_en::exe){
 #ifdef Q_OS_LINUX
       qDebug() << "exe running not supported for linux systems";
 #elif Q_OS_UNIX

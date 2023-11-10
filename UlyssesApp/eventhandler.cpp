@@ -30,8 +30,10 @@ Event *EventHandler::getEvent(int eventId){
             QString name = obj["name"].toString();
             QString path = obj["path"].toString();
             QString time = obj["time"].toString();
-            Type::type type = (obj["type"].toString() == "link") ? Type::link : Type::exe;
+            Type type = Type::strToTypeEnum(obj["type"].toString());
+
             QList<Qt::DayOfWeek> days;
+
 
             for(int i=0; i< obj["days"].toArray().count(); ++i){
                 QString str = obj["days"].toArray().at(i).toString();

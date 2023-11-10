@@ -11,7 +11,7 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
     ui->timelabel->setText(this->event.time());
     ui->namelabel->setText(this->event.name());
 
-    QString type = (this->event.type() == Type::type::link) ? "link" : "exe";
+    QString type = (this->event.type() == Type::type_en::link) ? "link" : "exe";
     ui->typelabel->setText(type);
 
     QString dayStr = "";

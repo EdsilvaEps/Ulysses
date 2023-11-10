@@ -28,7 +28,7 @@ EventEdit::EventEdit(QWidget *parent, int eventID) :
         qDebug() << "editting event: " << this->event->name();
 
         ui->eventName->setText(this->event->name());
-        if(this->event->type() == Type::type::link){
+        if(this->event->type() == Type::type_en::link){
             ui->linkTypeSelection->setChecked(true);
             ui->browseBtn->setDisabled(true);
         } else{
