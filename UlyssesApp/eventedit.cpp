@@ -12,13 +12,17 @@ EventEdit::EventEdit(QWidget *parent, int eventID) :
 
     evHandler = new EventHandler(this->eventsFile);
 
+    // adding event types to dropdown list
+    ui->comboBox->addItems(_eventTypes);
+
     // in case of no valid eventID supplied
     if(eventID < 0){
         this->_isNewEvent = true;
         this->event = new Event();
         this->event->setType(Type::link);
-        ui->linkTypeSelection->setChecked(true);
         ui->browseBtn->setDisabled(true);
+        ui->comboBox->setCurrentText("link");
+
 
 
     } else{ // set the event edit screen with the data of the selected event
@@ -28,13 +32,11 @@ EventEdit::EventEdit(QWidget *parent, int eventID) :
         qDebug() << "editting event: " << this->event->name();
 
         ui->eventName->setText(this->event->name());
+        ui->comboBox->setCurrentText(this->event->type().toString());
+
         if(this->event->type() == Type::type_en::link){
-            ui->linkTypeSelection->setChecked(true);
             ui->browseBtn->setDisabled(true);
-        } else{
-            ui->exeTypeSelection->setChecked(true);
-            ui->browseBtn->setDisabled(false);
-        }
+        } else ui->browseBtn->setDisabled(false);
 
         ui->urlPath->setText(this->event->path());
         ui->timeEdit->setTime(QDateTime::fromString(this->event->time(),"HH:mm").time());
@@ -211,23 +213,22 @@ int EventEdit::getNextValidId()
     return this->getEventsJsonArray()->size();
 }
 
-Event *EventEdit::getEventData(){
-    Event *ev = new Event();
-    ev->setId(this->event->id());
-    if(this->_isNewEvent)
-        ev->setId(this->getNextValidId());
-    ev->setPath(ui->urlPath->text());
-    ev->setDays(getSelectedDays());
-    ev->setTime(ui->timeEdit->text());
-    QString eventName = (ui->eventName->text().isEmpty()) ? "event" : ui->eventName->text();
-    ev->setName(eventName);
+void EventEdit::selectCurrentEventData(){
+    if(this->_isNewEvent){
+        this->event->setId(getNextValidId());
+    }
 
-    return ev;
+    this->event->setPath(ui->urlPath->text());
+    this->event->setDays(getSelectedDays());
+    this->event->setTime(ui->timeEdit->text());
+    QString eventName = (ui->eventName->text().isEmpty()) ? "event" : ui->eventName->text();
+    this->event->setName(eventName);
+
 }
 
 void EventEdit::saveEvent()
 {
-    this->event = this->getEventData();
+    selectCurrentEventData();
     qDebug() << "saving event...";
     writeFormattedEventToFile();
 
@@ -242,7 +243,7 @@ void EventEdit::loadEvent()
 void EventEdit::modifyEvent()
 {
     qDebug() << "Modifying event...";
-    this->event = this->getEventData();
+    selectCurrentEventData();
     if(evHandler->updateEvent(this->event->id(), *this->event)){
         qDebug() << "event successfully modified";
         return;
@@ -277,17 +278,13 @@ void EventEdit::createEmptyConfFile()
 }
 
 
-void EventEdit::on_linkTypeSelection_toggled(bool checked)
+void EventEdit::on_comboBox_currentTextChanged(const QString &arg1)
 {
-    if(checked) ui->browseBtn->setDisabled(true); // disable browse btn if we are using a link
-    this->event->setType(Type::link);
+    if(arg1 == "link"){
+        ui->browseBtn->setDisabled(true);
+    } else ui->browseBtn->setDisabled(false);
 
-}
+    this->event->setType(Type::strToTypeEnum(arg1));
 
-
-void EventEdit::on_exeTypeSelection_toggled(bool checked)
-{
-    if(checked) ui->browseBtn->setDisabled(false);
-    this->event->setType(Type::exe);
 }
 

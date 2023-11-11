@@ -43,12 +43,7 @@ public:
          return (this->value == rhs);
     }
 
-    QString toString(){
-        if(value == type_en::exe) return "exe";
-        if(value == type_en::link) return "link";
-        if(value == type_en::script) return "script";
-        return "exe";
-    }
+    QString toString() const;
 
 
 };
