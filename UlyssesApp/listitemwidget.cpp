@@ -1,4 +1,5 @@
 #include "listitemwidget.h"
+#include "qstyle.h"
 #include "ui_listitemwidget.h"
 #include "eventhandler.h"
 
@@ -26,12 +27,19 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
     }
     ui->dayslabel->setText(dayStr);
 
+    this->execMan = new ExecutionManager();
+    connect(execMan, &ExecutionManager::runErrorOccurred, this, &ListItemWidget::programError);
+    connect(execMan, &ExecutionManager::runFinished, this, &ListItemWidget::programFinished);
+    connect(execMan, &ExecutionManager::processStarted, this, &ListItemWidget::programStarted);
+
+    ui->statusBtn->setVisible(false);
 
 }
 
 ListItemWidget::~ListItemWidget()
 {
     delete ui;
+    delete execMan;
 }
 
 void ListItemWidget::on_removeItem_clicked()
@@ -50,7 +58,8 @@ void ListItemWidget::on_removeItem_clicked()
 
 void ListItemWidget::on_toolButton_clicked()
 {
-    ExecutionManager::run(this->event.path(), this->event.type());
+    qDebug() << "run clicked";
+    execMan->run(this->event.path(), this->event.type());
 }
 
 void ListItemWidget::on_settingsbtn_clicked()
@@ -62,5 +71,31 @@ void ListItemWidget::on_settingsbtn_clicked()
         emit eventsChanged();
     });
     dialog->exec();
+}
+
+void ListItemWidget::programError(const QString errMsg)
+{
+    qDebug() << errMsg;
+    //TODO: do something else here, like some UI change
+    ui->statusBtn->setVisible(true);
+
+
+}
+
+void ListItemWidget::programStarted()
+{
+    qDebug() << "Program started";
+    // TODO: add some UI change
+}
+
+void ListItemWidget::programFinished(bool success, const QString exitStatus)
+{
+    if(success) qDebug() << exitStatus;
+    // TODO: add some UI change
+    QStyle *style = QApplication::style();
+    QIcon myIcon = style->standardIcon(QStyle::SP_DialogOkButton);
+    ui->statusBtn->setIcon(myIcon);
+    ui->statusBtn->setVisible(true);
+
 }
 

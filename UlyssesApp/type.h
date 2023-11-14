@@ -29,7 +29,7 @@ public:
         return  type_en::exe;
     };
 
-    Type& operator=(const Type::type_en& other){
+    /*Type& operator=(const Type::type_en& other){
         value = other;
         return *this;
     };
@@ -37,7 +37,7 @@ public:
     Type& operator=(const Type& other){
         value = other.value;
         return *this;
-    };
+    };*/
 
     bool operator==(const Type::type_en& rhs) const{
          return (this->value == rhs);
