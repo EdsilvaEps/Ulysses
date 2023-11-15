@@ -2,6 +2,7 @@
 #include "qstyle.h"
 #include "ui_listitemwidget.h"
 #include "eventhandler.h"
+#include <memory>
 
 ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
     QWidget(parent),
@@ -76,8 +77,7 @@ void ListItemWidget::on_settingsbtn_clicked()
 void ListItemWidget::programError(const QString errMsg)
 {
     qDebug() << errMsg;
-    //TODO: do something else here, like some UI change
-    ui->statusBtn->setVisible(true);
+    setEventStatus("failure");
 
 
 }
@@ -85,15 +85,26 @@ void ListItemWidget::programError(const QString errMsg)
 void ListItemWidget::programStarted()
 {
     qDebug() << "Program started";
-    // TODO: add some UI change
+    setEventStatus("started");
 }
 
 void ListItemWidget::programFinished(bool success, const QString exitStatus)
 {
-    if(success) qDebug() << exitStatus;
-    // TODO: add some UI change
+    if(success){
+        qDebug() << exitStatus;
+        setEventStatus("success");
+    } else setEventStatus("failure");
+
+
+}
+
+void ListItemWidget::setEventStatus(const QString status)
+{
     QStyle *style = QApplication::style();
-    QIcon myIcon = style->standardIcon(QStyle::SP_DialogOkButton);
+    QIcon myIcon;
+    if(status == "success") myIcon = style->standardIcon(QStyle::SP_DialogOkButton);
+    if(status == "failure") myIcon = style->standardIcon(QStyle::SP_DialogCancelButton);
+    if(status == "started") myIcon = style->standardIcon(QStyle::SP_MediaPlay);
     ui->statusBtn->setIcon(myIcon);
     ui->statusBtn->setVisible(true);
 
