@@ -107,7 +107,7 @@ void ListItemWidget::setEventStatus(const QString status, const QString tooltip)
     if(status == "started") myIcon = style->standardIcon(QStyle::SP_MediaPlay);
     ui->statusBtn->setIcon(myIcon);
     ui->statusBtn->setVisible(true);
-    ui->statusBtn->setToolTip("");
+    ui->statusBtn->setToolTip(tooltip);
 
 }
 
