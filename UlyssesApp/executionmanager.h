@@ -37,7 +37,7 @@ private:
 
     void openBrowser(QString link);
     void executeProgram(QString path);
-    void runScript(QString path);
+    void runScript(QString path, Type type);
 };
 
 #endif // EXECUTIONMANAGER_H

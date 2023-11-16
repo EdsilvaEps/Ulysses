@@ -77,7 +77,7 @@ void ListItemWidget::on_settingsbtn_clicked()
 void ListItemWidget::programError(const QString errMsg)
 {
     qDebug() << errMsg;
-    setEventStatus("failure");
+    setEventStatus("failure", errMsg);
 
 
 }
@@ -85,20 +85,20 @@ void ListItemWidget::programError(const QString errMsg)
 void ListItemWidget::programStarted()
 {
     qDebug() << "Program started";
-    setEventStatus("started");
+    setEventStatus("started", "Program started");
 }
 
 void ListItemWidget::programFinished(bool success, const QString exitStatus)
 {
     if(success){
         qDebug() << exitStatus;
-        setEventStatus("success");
-    } else setEventStatus("failure");
+        setEventStatus("success", exitStatus);
+    } else setEventStatus("failure", exitStatus);
 
 
 }
 
-void ListItemWidget::setEventStatus(const QString status)
+void ListItemWidget::setEventStatus(const QString status, const QString tooltip)
 {
     QStyle *style = QApplication::style();
     QIcon myIcon;
@@ -107,6 +107,7 @@ void ListItemWidget::setEventStatus(const QString status)
     if(status == "started") myIcon = style->standardIcon(QStyle::SP_MediaPlay);
     ui->statusBtn->setIcon(myIcon);
     ui->statusBtn->setVisible(true);
+    ui->statusBtn->setToolTip("");
 
 }
 

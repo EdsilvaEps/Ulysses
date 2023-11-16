@@ -26,14 +26,28 @@ void ExecutionManager::run(QString path, Type type)
     if(type == Type::type_en::exe){
 #ifdef Q_OS_LINUX
       qDebug() << "exe running not supported for linux systems";
+      emit runErrorOccurred("exe running not supported for linux systems");
 #elif Q_OS_UNIX
         qDebug() << "exe running not supported for unix systems";
+        emit runErrorOccurred("exe running not supported for linux systems");
 #elif Q_OS_WIN32
         executeProgram(path);
 #endif
     }
 
-    if(type == Type::type_en::script) runScript(path);
+    if(type == Type::type_en::script_shell){
+#ifdef Q_OS_WIN32
+        emit runErrorOccurred("bash script running not supported for windows systems");
+        return;
+#endif
+       runScript(path, type);
+    }
+
+    if(type == Type::type_en::script_python)
+    {
+        runScript(path, type);
+    }
+
 
 }
 
@@ -81,13 +95,15 @@ void ExecutionManager::executeProgram(QString path)
     QProcess *proc = new QProcess;
 
     proc->start(path);
-
 }
 
-void ExecutionManager::runScript(QString path)
+void ExecutionManager::runScript(QString path, Type type)
 {
     QStringList args {path};
-    proc->start("python3", args);
+    if(type == Type::type_en::script_python)
+        proc->start("python3", args);
+    if(type == Type::type_en::script_shell)
+        proc->start("/bin/bash", args);
     // TODO: something will have to be done about the program arg here, it's gonna be different in each system
     // maybe add some config for it
 

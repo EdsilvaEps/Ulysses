@@ -3,6 +3,7 @@
 #include "QMessageBox"
 #include <QFileDialog>
 #include "event.h"
+#include <QDebug>
 
 EventEdit::EventEdit(QWidget *parent, int eventID) :
     QDialog(parent),

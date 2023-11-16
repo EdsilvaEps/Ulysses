@@ -45,7 +45,7 @@ private:
     Event *event;
     EventHandler *evHandler;
     bool _isNewEvent; // variable provide from parent
-    QStringList _eventTypes = {"link","exe","script"};
+    QStringList _eventTypes = Type::listTypes();
 
     void saveEvent();
     void loadEvent();

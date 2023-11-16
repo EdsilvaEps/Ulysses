@@ -35,7 +35,7 @@ private:
     Event event; // object that constitutes the data of this element
     ExecutionManager *execMan;
 
-    void setEventStatus(const QString status); // visual event status when running events
+    void setEventStatus(const QString status, const QString tooltip); // visual event status when running events
 };
 
 #endif // LISTITEMWIDGET_H
