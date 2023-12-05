@@ -60,7 +60,10 @@ void ListItemWidget::on_removeItem_clicked()
 void ListItemWidget::on_toolButton_clicked()
 {
     qDebug() << "run clicked";
-    execMan->run(this->event.path(), this->event.type());
+    if(this->event.args().length() > 0){
+       execMan->run(this->event.path(), this->event.type(), this->event.args());
+    }
+    else execMan->run(this->event.path(), this->event.type(), {""});
 }
 
 void ListItemWidget::on_settingsbtn_clicked()

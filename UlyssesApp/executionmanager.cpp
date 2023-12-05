@@ -17,7 +17,7 @@ ExecutionManager::~ExecutionManager()
     delete proc;
 }
 
-void ExecutionManager::run(QString path, Type type)
+void ExecutionManager::run(QString path, Type type, QStringList args)
 {
     if(type == Type::type_en::link){
         openBrowser(path);
@@ -40,12 +40,12 @@ void ExecutionManager::run(QString path, Type type)
         emit runErrorOccurred("bash script running not supported for windows systems");
         return;
 #endif
-       runScript(path, type);
+       runScript(path, type, args);
     }
 
     if(type == Type::type_en::script_python)
     {
-        runScript(path, type);
+        runScript(path, type, args);
     }
 
 
@@ -97,13 +97,17 @@ void ExecutionManager::executeProgram(QString path)
     proc->start(path);
 }
 
-void ExecutionManager::runScript(QString path, Type type)
+void ExecutionManager::runScript(QString path, Type type, QStringList args)
 {
-    QStringList args {path};
+    QStringList input {path};
+    if(args.length() > 0 ){
+        input.append(args);
+        qDebug() << "running script with " << args.length() << " args";
+    }
     if(type == Type::type_en::script_python)
-        proc->start("python3", args);
+        proc->start("python3", input);
     if(type == Type::type_en::script_shell)
-        proc->start("/bin/bash", args);
+        proc->start("/bin/bash", input);
     // TODO: something will have to be done about the program arg here, it's gonna be different in each system
     // maybe add some config for it
 

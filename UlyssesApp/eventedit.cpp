@@ -52,6 +52,14 @@ EventEdit::EventEdit(QWidget *parent, int eventID) :
             if(day == Qt::DayOfWeek::Sunday) ui->sunSelection->setCheckState(Qt::Checked);
         }
 
+        ui->scriptArgsBox->setVisible(false);
+        if(this->event->type() == Type::type_en::script_python ||
+                this->event->type() == Type::type_en::script_shell)
+        {
+            ui->scriptArgsBox->setVisible(true);
+            fillArgsLine();
+        }
+
     }
 
 }
@@ -219,11 +227,19 @@ void EventEdit::selectCurrentEventData(){
         this->event->setId(getNextValidId());
     }
 
+    if(this->event->type() == Type::type_en::script_python ||
+        this->event->type() == Type::type_en::script_shell)
+    {
+        this->event->setArgs(getArguments());
+    }
+
     this->event->setPath(ui->urlPath->text());
     this->event->setDays(getSelectedDays());
     this->event->setTime(ui->timeEdit->text());
     QString eventName = (ui->eventName->text().isEmpty()) ? "event" : ui->eventName->text();
     this->event->setName(eventName);
+
+
 
 }
 
@@ -239,6 +255,20 @@ void EventEdit::loadEvent()
 {
     qDebug() << "loading event...";
 
+}
+
+void EventEdit::fillArgsLine()
+{
+    if(this->event->args().length() == 0) return;
+
+    QString argStr = "";
+    for(const QString &argument : this->event->args()){
+        qDebug() << argument;
+        argStr.append(argument);
+        argStr.append(",");
+    }
+   argStr.chop(1); // remove last comma
+   ui->scriptArgsLine->setText(argStr);
 }
 
 void EventEdit::modifyEvent()
@@ -287,5 +317,16 @@ void EventEdit::on_comboBox_currentTextChanged(const QString &arg1)
 
     this->event->setType(Type::strToTypeEnum(arg1));
 
+    // enable arguments if option is script
+    if(arg1 == "script_python" || arg1 == "script_shell"){
+        ui->scriptArgsBox->setVisible(true);
+    } else ui->scriptArgsBox->setVisible(false);
+
+}
+
+QStringList EventEdit::getArguments()
+{
+    const QString rawArgStr = ui->scriptArgsLine->text();
+    return rawArgStr.split(",");
 }
 

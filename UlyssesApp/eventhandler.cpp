@@ -33,8 +33,6 @@ Event *EventHandler::getEvent(int eventId){
             Type type = Type::strToTypeEnum(obj["type"].toString());
 
             QList<Qt::DayOfWeek> days;
-
-
             for(int i=0; i< obj["days"].toArray().count(); ++i){
                 QString str = obj["days"].toArray().at(i).toString();
                 if(str == "Monday") days.append(Qt::Monday);
@@ -46,12 +44,18 @@ Event *EventHandler::getEvent(int eventId){
                 if(str == "Sunday") days.append(Qt::Sunday);
             }
 
+            QStringList argsList;
+            for(QJsonValueRef argObj : obj["args"].toArray()){
+                argsList.append(argObj.toString(""));
+            }
+
            event->setId(id);
            event->setPath(path);
            event->setType(type);
            event->setTime(time);
            event->setDays(days);
            event->setName(name);
+           event->setArgs(argsList);
            break;
         }
     }

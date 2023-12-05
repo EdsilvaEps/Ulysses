@@ -17,7 +17,7 @@ public:
     ExecutionManager();
     ~ExecutionManager();
 
-    void run(QString path, Type type);
+    void run(QString path, Type type, QStringList args);
 
 signals:
     void runErrorOccurred(const QString errMsg);
@@ -37,7 +37,7 @@ private:
 
     void openBrowser(QString link);
     void executeProgram(QString path);
-    void runScript(QString path, Type type);
+    void runScript(QString path, Type type, QStringList args);
 };
 
 #endif // EXECUTIONMANAGER_H

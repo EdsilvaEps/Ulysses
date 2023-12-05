@@ -46,9 +46,10 @@ private:
     EventHandler *evHandler;
     bool _isNewEvent; // variable provide from parent
     QStringList _eventTypes = Type::listTypes();
-
+    QStringList getArguments();
     void saveEvent();
     void loadEvent();
+    void fillArgsLine();
     void modifyEvent(); // TODO: specify arg details of event
     QList<Qt::DayOfWeek> getSelectedDays();
     bool fieldsValid();

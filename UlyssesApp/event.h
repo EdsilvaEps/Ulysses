@@ -17,6 +17,7 @@ private:
     Type _type;
     QString _time;
     QList<Qt::DayOfWeek> _days;
+    QStringList _args; // arguments that go along running of scripts
 
 public:
     //explicit Event(QObject *parent = nullptr);
@@ -45,6 +46,9 @@ public:
 
     const QString &name() const;
     void setName(const QString &newName);
+
+    const QStringList &args() const;
+    void setArgs(const QStringList &newArgs);
 
     QJsonObject getAsJsonObj();
 

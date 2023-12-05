@@ -59,6 +59,22 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="scriptArgsBox">
+     <property name="title">
+      <string>Script Arguments</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLineEdit" name="scriptArgsLine">
+        <property name="placeholderText">
+         <string>arg1, arg2, arg3...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">

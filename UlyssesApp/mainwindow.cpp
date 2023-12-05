@@ -64,8 +64,14 @@ QList<Event> MainWindow::getEvents()
                 if(str == "Sunday") days.append(Qt::Sunday);
             }
 
+            QStringList argsList;
+            for(QJsonValueRef argObj : obj["args"].toArray()){
+                argsList.append(argObj.toString(""));
+            }
+
            Event ev = Event(id, path, type, time, days);
            ev.setName(name);
+           ev.setArgs(argsList);
            eventsList.append(ev);
         }
     }

@@ -11,6 +11,16 @@ void Event::setName(const QString &newName)
     _name = newName;
 }
 
+const QStringList &Event::args() const
+{
+    return _args;
+}
+
+void Event::setArgs(const QStringList &newArgs)
+{
+    _args = newArgs;
+}
+
 void Event::setId(int newId)
 {
     _id = newId;
@@ -118,8 +128,15 @@ QJsonObject Event::getAsJsonObj(){
         if(day == Qt::Saturday) daysObj.push_back("Saturday");
         if(day == Qt::Sunday) daysObj.push_back("Sunday");
     }
-
     eventObj.insert("days", daysObj);
+
+    QJsonArray argsObj;
+    if(_args.length() > 0){
+        for(const QString &argument : _args)
+            argsObj.push_back(argument);
+    }
+    eventObj.insert("args", argsObj);
+
     return eventObj;
 
 }
