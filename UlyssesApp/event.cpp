@@ -21,6 +21,16 @@ void Event::setArgs(const QStringList &newArgs)
     _args = newArgs;
 }
 
+const StartupMode &Event::mode() const
+{
+    return _mode;
+}
+
+void Event::setStartupMode(const StartupMode &mode)
+{
+    _mode = mode;
+}
+
 void Event::setId(int newId)
 {
     _id = newId;
@@ -29,7 +39,7 @@ void Event::setId(int newId)
 Event::Event():
     _id(-1), _name("event"), _path(""), _type(Type::type_en::exe), _time("00:00"), _days(QList<Qt::DayOfWeek>())
 {
-
+    this->_mode = StartupMode();
 }
 
 Event::Event(int id, QString path, Type type, QString time, QList<Qt::DayOfWeek> days)
@@ -39,11 +49,11 @@ Event::Event(int id, QString path, Type type, QString time, QList<Qt::DayOfWeek>
     this->_type = type;
     this->_time = time;
     this->_days = days;
+    this->_mode = StartupMode();
 
     qDebug() << "event created " << id;
 
     //TODO: prevent wrong types here
-    //TODO: also processing paths is gonna be necessary
 
 }
 
@@ -93,23 +103,6 @@ const int &Event::id() const
     return _id;
 }
 
-
-
-bool Event::launchTime()
-{
-    //QDateTime *now = new QDateTime;
-    //*now = QDateTime::currentDateTime();
-
-    //if(this->_days.contains(now->date().dayOfWeek())){
-    //    if(this->_time->hour()==now->time().hour()){
-    //        return true;
-    //    }
-    //}
-    //return false;
-    return false;
-
-}
-
 QJsonObject Event::getAsJsonObj(){
     QJsonObject eventObj;
     eventObj.insert("id", this->_id);
@@ -117,8 +110,9 @@ QJsonObject Event::getAsJsonObj(){
     eventObj.insert("type", this->_type.toString());
     eventObj.insert("time", this->_time);
     eventObj.insert("path", this->_path);
+    eventObj.insert("startupmode", this->_mode.toString());
 
-    QJsonArray daysObj;
+    QJsonArray daysObj = {};
     for(Qt::DayOfWeek day : this->_days){
         if(day == Qt::Monday) daysObj.push_back("Monday");
         if(day == Qt::Tuesday) daysObj.push_back("Tuesday");

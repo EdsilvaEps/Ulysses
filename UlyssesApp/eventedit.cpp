@@ -10,6 +10,7 @@ EventEdit::EventEdit(QWidget *parent, int eventID) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+    showTimeBoxes(false);
 
     evHandler = new EventHandler(this->eventsFile);
 
@@ -145,7 +146,7 @@ void EventEdit::on_browseBtn_clicked()
 
 
 QList<Qt::DayOfWeek> EventEdit::getSelectedDays(){
-    QList<Qt::DayOfWeek> selectedDays;
+    QList<Qt::DayOfWeek> selectedDays = {};
     if(ui->monSelection->isChecked()) selectedDays.append(Qt::DayOfWeek::Monday);
     if(ui->tueSelection->isChecked()) selectedDays.append(Qt::DayOfWeek::Tuesday);
     if(ui->wedSelection->isChecked()) selectedDays.append(Qt::DayOfWeek::Wednesday);
@@ -165,7 +166,7 @@ bool EventEdit::fieldsValid(){
     }
 
     QList<Qt::DayOfWeek> list = getSelectedDays();
-    if(list.empty()){
+    if((event->mode() == StartupMode::date) && list.empty()){
         QMessageBox::warning(this, "Missing field", "You have to select at least one day for the event");
         return false;
     }
@@ -330,3 +331,32 @@ QStringList EventEdit::getArguments()
     return rawArgStr.split(",");
 }
 
+
+void EventEdit::on_manualRdBtn_clicked()
+{
+    showTimeBoxes(false);
+    this->event->setStartupMode(StartupMode(StartupMode::manual));
+    QWidget::adjustSize();
+}
+
+
+void EventEdit::on_startupRdBtn_clicked()
+{
+    showTimeBoxes(false);
+    this->event->setStartupMode(StartupMode(StartupMode::atStartup));
+    QWidget::adjustSize();
+}
+
+
+void EventEdit::on_scheduleRdBtn_clicked()
+{
+    showTimeBoxes(true);
+    this->event->setStartupMode(StartupMode(StartupMode::date));
+    QWidget::adjustSize();
+}
+
+void EventEdit::showTimeBoxes(bool show){
+    ui->timeBox->setVisible(show);
+    ui->dayBox->setVisible(show);
+
+}

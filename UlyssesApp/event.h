@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include "type.h"
+#include "startupmode.h"
 
 class Event
 {
@@ -15,22 +16,16 @@ private:
     QString _name;
     QString _path;
     Type _type;
+    StartupMode _mode;
     QString _time;
     QList<Qt::DayOfWeek> _days;
     QStringList _args; // arguments that go along running of scripts
 
 public:
-    //explicit Event(QObject *parent = nullptr);
 
     Event(int id, QString path, Type type, QString time, QList<Qt::DayOfWeek> days);
 
     Event();
-
-    // launch event
-    //void launch();
-
-    // check if event is within launching time
-    bool launchTime();
 
     const QString &path() const;
     void setPath(const QString &newPath);
@@ -49,6 +44,9 @@ public:
 
     const QStringList &args() const;
     void setArgs(const QStringList &newArgs);
+
+    const StartupMode &mode() const;
+    void setStartupMode (const StartupMode &mode);
 
     QJsonObject getAsJsonObj();
 

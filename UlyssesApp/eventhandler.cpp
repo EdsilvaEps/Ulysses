@@ -6,6 +6,7 @@ EventHandler::EventHandler(QString events_file)
 
 }
 
+
 Event *EventHandler::getEvent(int eventId){
     QJsonArray *events;
     Event *event = new Event();
@@ -31,6 +32,7 @@ Event *EventHandler::getEvent(int eventId){
             QString path = obj["path"].toString();
             QString time = obj["time"].toString();
             Type type = Type::strToTypeEnum(obj["type"].toString());
+            StartupMode mode = StartupMode(obj["startupmode"].toString(""));
 
             QList<Qt::DayOfWeek> days;
             for(int i=0; i< obj["days"].toArray().count(); ++i){
@@ -56,13 +58,13 @@ Event *EventHandler::getEvent(int eventId){
            event->setDays(days);
            event->setName(name);
            event->setArgs(argsList);
+           event->setStartupMode(mode);
            break;
         }
     }
     return event;
 
 }
-
 
 
 bool EventHandler::updateEvent(Event ev, int id)
@@ -174,5 +176,6 @@ bool EventHandler::removeEvent(int id)
 
 
 }
+
 
 

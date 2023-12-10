@@ -23,9 +23,6 @@ signals:
     void runErrorOccurred(const QString errMsg);
     void runFinished(bool success, const QString exitStatus);
     void processStarted();
-    /*
-errorOccurred(QProcess::ProcessError error)
-void 	finished(int exitCode, QProcess::ExitStatus exitStatus)*/
 
 private slots:
     void onErrorOccurred(QProcess::ProcessError error);

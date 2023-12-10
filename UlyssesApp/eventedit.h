@@ -21,7 +21,6 @@ class EventEdit : public QDialog
 public:
     explicit EventEdit(QWidget *parent = nullptr, int eventID = -1);
     ~EventEdit();
-
     static QJsonArray *getEventsJsonArray(); // returns events as a json array
 
     static const inline QString eventsFilePath = "/home/edson/Documents/ulysses_conf/";
@@ -40,6 +39,12 @@ private slots:
 
     void on_comboBox_currentTextChanged(const QString &arg1);
 
+    void on_manualRdBtn_clicked();
+
+    void on_startupRdBtn_clicked();
+
+    void on_scheduleRdBtn_clicked();
+
 private:
     Ui::Dialog *ui;
     Event *event;
@@ -57,6 +62,7 @@ private:
     int getNextValidId();
     bool isFileEmpty();
     void selectCurrentEventData(); // select the user input data and put on the event object, ready for saving
+    void showTimeBoxes(bool show);
 };
 
 

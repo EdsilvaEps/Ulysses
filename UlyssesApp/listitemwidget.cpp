@@ -10,22 +10,30 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
 {
     this->event = *event;
     ui->setupUi(this);
-    ui->timelabel->setText(this->event.time());
     ui->namelabel->setText(this->event.name());
+    ui->timelabel->setText("");
 
     QString type = this->event.type().toString();
     ui->typelabel->setText(type);
 
     QString dayStr = "";
-    for(Qt::DayOfWeek day : this->event.days()){
-        if(day == Qt::Monday) dayStr += "Mon ";
-        if(day == Qt::Tuesday) dayStr += "Tue ";
-        if(day == Qt::Wednesday) dayStr += "Wed ";
-        if(day == Qt::Thursday) dayStr += "Thu ";
-        if(day == Qt::Friday) dayStr += "Fri ";
-        if(day == Qt::Saturday) dayStr += "Sat ";
-        if(day == Qt::Sunday) dayStr += "Sun ";
+    if(this->event.mode() == StartupMode::atStartup)
+        dayStr = "startup";
+    if(this->event.mode() == StartupMode::manual)
+        dayStr = "manual";
+    if(this->event.mode() == StartupMode::date){
+        ui->timelabel->setText(this->event.time());
+        for(Qt::DayOfWeek day : this->event.days()){
+            if(day == Qt::Monday) dayStr += "Mon ";
+            if(day == Qt::Tuesday) dayStr += "Tue ";
+            if(day == Qt::Wednesday) dayStr += "Wed ";
+            if(day == Qt::Thursday) dayStr += "Thu ";
+            if(day == Qt::Friday) dayStr += "Fri ";
+            if(day == Qt::Saturday) dayStr += "Sat ";
+            if(day == Qt::Sunday) dayStr += "Sun ";
+        }
     }
+
     ui->dayslabel->setText(dayStr);
 
     this->execMan = new ExecutionManager();
