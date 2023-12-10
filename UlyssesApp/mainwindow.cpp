@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ui_listitemwidget.h"
-#include "eventhandler.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->time = new QDateTime();
     this->updateVisualDate();
     this->populateList();
+
 }
 
 MainWindow::~MainWindow()
@@ -50,7 +49,8 @@ QList<Event> MainWindow::getEvents()
             QString name = obj["name"].toString();
             QString path = obj["path"].toString();
             QString time = obj["time"].toString();
-            Type::type type = (obj["type"].toString() == "link") ? Type::link : Type::exe;
+            Type type = Type::strToTypeEnum(obj["type"].toString());
+            StartupMode mode = StartupMode(obj["startupmode"].toString(""));
             QList<Qt::DayOfWeek> days;
 
             for(int i=0; i< obj["days"].toArray().count(); ++i){
@@ -64,8 +64,15 @@ QList<Event> MainWindow::getEvents()
                 if(str == "Sunday") days.append(Qt::Sunday);
             }
 
+            QStringList argsList;
+            for(QJsonValueRef argObj : obj["args"].toArray()){
+                argsList.append(argObj.toString(""));
+            }
+
            Event ev = Event(id, path, type, time, days);
            ev.setName(name);
+           ev.setArgs(argsList);
+           ev.setStartupMode(mode);
            eventsList.append(ev);
         }
     }
@@ -78,20 +85,26 @@ QList<Event> MainWindow::getEvents()
 void MainWindow::populateList()
 {
     QList<Event> events = this->getEvents();
+
     qDebug() << "Number of events to populate: " << events.size();
 
-    for(Event event : events){
-        QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
-        ui->listWidget->addItem(listWidgetItem);
-        ListItemWidget *customWidgetItem = new ListItemWidget(ui->listWidget,&event);
-        listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
-        ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
+    try {
+        for(Event event : events){
+            QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
+            ui->listWidget->addItem(listWidgetItem);
+            ListItemWidget *customWidgetItem = new ListItemWidget(ui->listWidget,&event);
+            listWidgetItem->setSizeHint(customWidgetItem->sizeHint());
+            ui->listWidget->setItemWidget(listWidgetItem, customWidgetItem);
 
-        connect(customWidgetItem, &ListItemWidget::eventsChanged, this, &MainWindow::on_eventsUpdated);
+            connect(customWidgetItem, &ListItemWidget::eventsChanged, this, &MainWindow::on_eventsUpdated);
 
-        // if this is the first element, then select it
-        if(ui->listWidget->count() == 1) ui->listWidget->setCurrentItem(listWidgetItem);
+            // if this is the first element, then select it
+            if(ui->listWidget->count() == 1) ui->listWidget->setCurrentItem(listWidgetItem);
+        }
+    } catch (std::exception const& e) {
+        qDebug() << "mainwindow: " << e.what();
     }
+
 
 }
 

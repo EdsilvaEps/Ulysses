@@ -17,6 +17,7 @@ SOURCES += \
     listitemwidget.cpp \
     main.cpp \
     mainwindow.cpp \
+    startupmode.cpp \
     type.cpp
 
 HEADERS += \
@@ -26,6 +27,7 @@ HEADERS += \
     executionmanager.h \
     listitemwidget.h \
     mainwindow.h \
+    startupmode.h \
     type.h
 
 DEFINES += ULYSSESAPP_LIBRARY

@@ -6,6 +6,7 @@ EventHandler::EventHandler(QString events_file)
 
 }
 
+
 Event *EventHandler::getEvent(int eventId){
     QJsonArray *events;
     Event *event = new Event();
@@ -30,9 +31,10 @@ Event *EventHandler::getEvent(int eventId){
             QString name = obj["name"].toString();
             QString path = obj["path"].toString();
             QString time = obj["time"].toString();
-            Type::type type = (obj["type"].toString() == "link") ? Type::link : Type::exe;
-            QList<Qt::DayOfWeek> days;
+            Type type = Type::strToTypeEnum(obj["type"].toString());
+            StartupMode mode = StartupMode(obj["startupmode"].toString(""));
 
+            QList<Qt::DayOfWeek> days;
             for(int i=0; i< obj["days"].toArray().count(); ++i){
                 QString str = obj["days"].toArray().at(i).toString();
                 if(str == "Monday") days.append(Qt::Monday);
@@ -44,19 +46,25 @@ Event *EventHandler::getEvent(int eventId){
                 if(str == "Sunday") days.append(Qt::Sunday);
             }
 
+            QStringList argsList;
+            for(QJsonValueRef argObj : obj["args"].toArray()){
+                argsList.append(argObj.toString(""));
+            }
+
            event->setId(id);
            event->setPath(path);
            event->setType(type);
            event->setTime(time);
            event->setDays(days);
            event->setName(name);
+           event->setArgs(argsList);
+           event->setStartupMode(mode);
            break;
         }
     }
     return event;
 
 }
-
 
 
 bool EventHandler::updateEvent(Event ev, int id)
@@ -168,5 +176,6 @@ bool EventHandler::removeEvent(int id)
 
 
 }
+
 
 

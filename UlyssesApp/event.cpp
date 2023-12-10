@@ -1,21 +1,5 @@
 #include "event.h"
 
-/*#include <sstream>
-#include <chrono>
-#include <iomanip>
-
-using std::chrono::system_clock;
-
-namespace {
-    system_clock::time_point getTimePoint(QString time) {
-        std::tm myTm = {};
-        std::stringstream ss(time.toStdString().c_str());
-        ss >> std::get_time(&myTm, "%H:%M");
-        return system_clock::from_time_t(std::mktime(&myTm));
-
-    }
-} */
-
 
 const QString &Event::name() const
 {
@@ -27,29 +11,49 @@ void Event::setName(const QString &newName)
     _name = newName;
 }
 
+const QStringList &Event::args() const
+{
+    return _args;
+}
+
+void Event::setArgs(const QStringList &newArgs)
+{
+    _args = newArgs;
+}
+
+const StartupMode &Event::mode() const
+{
+    return _mode;
+}
+
+void Event::setStartupMode(const StartupMode &mode)
+{
+    _mode = mode;
+}
+
 void Event::setId(int newId)
 {
     _id = newId;
 }
 
 Event::Event():
-    _id(-1), _name("event"), _path(""), _type(Type::link), _time("00:00"), _days(QList<Qt::DayOfWeek>())
+    _id(-1), _name("event"), _path(""), _type(Type::type_en::exe), _time("00:00"), _days(QList<Qt::DayOfWeek>())
 {
-
+    this->_mode = StartupMode();
 }
 
-Event::Event(int id, QString path, Type::type type, QString time, QList<Qt::DayOfWeek> days)
+Event::Event(int id, QString path, Type type, QString time, QList<Qt::DayOfWeek> days)
 {
     this->_id = id;
     this->_path = path;
     this->_type = type;
     this->_time = time;
     this->_days = days;
+    this->_mode = StartupMode();
 
     qDebug() << "event created " << id;
 
     //TODO: prevent wrong types here
-    //TODO: also processing paths is gonna be necessary
 
 }
 
@@ -64,12 +68,12 @@ void Event::setPath(const QString &newPath)
     _path = newPath;
 }
 
-const Type::type &Event::type() const
+const Type &Event::type() const
 {
     return _type;
 }
 
-void Event::setType(const Type::type &newType)
+void Event::setType(const Type &newType)
 {
     _type = newType;
 }
@@ -99,34 +103,16 @@ const int &Event::id() const
     return _id;
 }
 
-
-
-bool Event::launchTime()
-{
-    //QDateTime *now = new QDateTime;
-    //*now = QDateTime::currentDateTime();
-
-    //if(this->_days.contains(now->date().dayOfWeek())){
-    //    if(this->_time->hour()==now->time().hour()){
-    //        return true;
-    //    }
-    //}
-    //return false;
-    return false;
-
-}
-
 QJsonObject Event::getAsJsonObj(){
     QJsonObject eventObj;
     eventObj.insert("id", this->_id);
     eventObj.insert("name", this->_name);
-    if(this->_type == Type::exe) eventObj.insert("type", "exe");
-    if(this->_type == Type::link) eventObj.insert("type", "link");
-    if(this->_type == Type::script) eventObj.insert("type","script");
+    eventObj.insert("type", this->_type.toString());
     eventObj.insert("time", this->_time);
     eventObj.insert("path", this->_path);
+    eventObj.insert("startupmode", this->_mode.toString());
 
-    QJsonArray daysObj;
+    QJsonArray daysObj = {};
     for(Qt::DayOfWeek day : this->_days){
         if(day == Qt::Monday) daysObj.push_back("Monday");
         if(day == Qt::Tuesday) daysObj.push_back("Tuesday");
@@ -136,8 +122,15 @@ QJsonObject Event::getAsJsonObj(){
         if(day == Qt::Saturday) daysObj.push_back("Saturday");
         if(day == Qt::Sunday) daysObj.push_back("Sunday");
     }
-
     eventObj.insert("days", daysObj);
+
+    QJsonArray argsObj;
+    if(_args.length() > 0){
+        for(const QString &argument : _args)
+            argsObj.push_back(argument);
+    }
+    eventObj.insert("args", argsObj);
+
     return eventObj;
 
 }

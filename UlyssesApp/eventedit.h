@@ -21,7 +21,6 @@ class EventEdit : public QDialog
 public:
     explicit EventEdit(QWidget *parent = nullptr, int eventID = -1);
     ~EventEdit();
-
     static QJsonArray *getEventsJsonArray(); // returns events as a json array
 
     static const inline QString eventsFilePath = "/home/edson/Documents/ulysses_conf/";
@@ -34,30 +33,36 @@ public:
 
 private slots:
 
-
     void on_submitBox_clicked(QAbstractButton *button);
 
     void on_browseBtn_clicked();
 
-    void on_linkTypeSelection_toggled(bool checked);
+    void on_comboBox_currentTextChanged(const QString &arg1);
 
-    void on_exeTypeSelection_toggled(bool checked);
+    void on_manualRdBtn_clicked();
+
+    void on_startupRdBtn_clicked();
+
+    void on_scheduleRdBtn_clicked();
 
 private:
     Ui::Dialog *ui;
     Event *event;
     EventHandler *evHandler;
     bool _isNewEvent; // variable provide from parent
-
+    QStringList _eventTypes = Type::listTypes();
+    QStringList getArguments();
     void saveEvent();
     void loadEvent();
+    void fillArgsLine();
     void modifyEvent(); // TODO: specify arg details of event
     QList<Qt::DayOfWeek> getSelectedDays();
     bool fieldsValid();
     void writeFormattedEventToFile();
     int getNextValidId();
     bool isFileEmpty();
-    Event *getEventData(); // return pointer to event obj with all the event informations in the page
+    void selectCurrentEventData(); // select the user input data and put on the event object, ready for saving
+    void showTimeBoxes(bool show);
 };
 
 

@@ -26,10 +26,16 @@ private slots:
     void on_removeItem_clicked();
     void on_toolButton_clicked(); // run button action
     void on_settingsbtn_clicked(); // edit event
+    void programError(const QString errMsg);
+    void programStarted();
+    void programFinished(bool success, const QString exitStatus);
 
 private:
     Ui::ListItemWidget *ui;
     Event event; // object that constitutes the data of this element
+    ExecutionManager *execMan;
+
+    void setEventStatus(const QString status, const QString tooltip); // visual event status when running events
 };
 
 #endif // LISTITEMWIDGET_H
