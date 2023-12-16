@@ -86,7 +86,15 @@ void ExecutionManager::onProgramStarted()
 
 void ExecutionManager::openBrowser(QString link)
 {
-    QDesktopServices::openUrl(QUrl(link, QUrl::TolerantMode));
+    qDebug() << "checking url" << link;
+    QUrl url = QUrl(link, QUrl::StrictMode);
+    if(!url.isValid()){
+        qDebug() << "url is invalid";
+        emit runErrorOccurred("url is invalid");
+        return;
+    }
+    qDebug() << "is url valid? " << url.isValid();
+    QDesktopServices::openUrl(url);
 
 }
 

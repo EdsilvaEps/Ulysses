@@ -18,19 +18,20 @@ ListItemWidget::ListItemWidget(QWidget *parent, Event *event) :
 
     QString dayStr = "";
     if(this->event.mode() == StartupMode::atStartup)
-        dayStr = "startup";
+        dayStr = "event triggers at pc startup";
     if(this->event.mode() == StartupMode::manual)
-        dayStr = "manual";
+        dayStr = "manual event, click to run";
     if(this->event.mode() == StartupMode::date){
         ui->timelabel->setText(this->event.time());
+        dayStr = "event starts every ";
         for(Qt::DayOfWeek day : this->event.days()){
-            if(day == Qt::Monday) dayStr += "Mon ";
-            if(day == Qt::Tuesday) dayStr += "Tue ";
-            if(day == Qt::Wednesday) dayStr += "Wed ";
-            if(day == Qt::Thursday) dayStr += "Thu ";
-            if(day == Qt::Friday) dayStr += "Fri ";
-            if(day == Qt::Saturday) dayStr += "Sat ";
-            if(day == Qt::Sunday) dayStr += "Sun ";
+            if(day == Qt::Monday) dayStr += "Monday ";
+            if(day == Qt::Tuesday) dayStr += "Tuesday ";
+            if(day == Qt::Wednesday) dayStr += "Wednesday ";
+            if(day == Qt::Thursday) dayStr += "Thursday ";
+            if(day == Qt::Friday) dayStr += "Friday ";
+            if(day == Qt::Saturday) dayStr += "Saturday ";
+            if(day == Qt::Sunday) dayStr += "Sunday ";
         }
     }
 
