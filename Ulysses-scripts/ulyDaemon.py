@@ -13,6 +13,9 @@ import sys
 
 def notify(message):
 
+    # if windows
+    # TODO: add windows notification code
+
     # if UBUNTU : 
     if sys.platform.startswith('linux'):
         subprocess.Popen(['notify-send', 'Ulysses Task Notification', message])
@@ -21,16 +24,26 @@ def notify(message):
         pass
 
 def checkTasks():
+    # here check tasks for notification or execution conditions
+    # like startup or schedule
     pass
 
 def getEvents():
     # extract json objects and create a dict list for 
-    # the corresponding events 
-    pass 
-    
-    
+    # the corresponding events
+    path = dataPath + dataFile
+    data = ''
+    try:
+        with open(path, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print("could not open files")
+        notify("could not open files")
 
+    # example event
+    for data_event in data:
+        print(data_event['name'])
 
-
-notify('task 4 is starting in 5 minutes')
+getEvents()
+#notify('task 4 is starting in 5 minutes')
 
