@@ -11,7 +11,7 @@ path = dataPath + dataFile
 import json
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 
 startupEvents = []
 todaysEvents = []
@@ -43,9 +43,11 @@ def organizeEvents():
         for event in events:
             if event['startupmode'] == 'atStartup':
                 startupEvents.append(event)
+                print("organized startup event")
             if event['startupmode'] == 'date': # scheduled event, compare with todays date
                 if weekday in event['days']:
                     todaysEvents.append(event)
+                    print("organized today event")
 
     except ValueError as error:
         print(error)
@@ -55,20 +57,37 @@ def checkTasks():
     # like startup or schedule
     current_date = datetime.now()
     # check todays events for those that could be close to the current time
-    for event in todaysEvents:
-        timestr = event['time'][0:5]
-        eventime = datetime.strptime(timestr, "%H:%M")
-        print(eventime)
-        # TODO:compare only hours/minutes, otherwise larger aspects (years, months) will affect comparison
-        if(current_date > eventime):
-            print("event time has already passed")
+    closeEvents = []
+    executeNowEvents = []
 
-            delta = current_date - eventime
-            print(delta)
-            continue
+    for event in todaysEvents:
+        timestr = event['time']
+        eventime = datetime.strptime(timestr, "%I:%M %p")
+        eventime = eventime.replace(year=current_date.year, month=
+                                    current_date.month, day=current_date.day)
+
+        print(eventime)
+        if(current_date < eventime):
+            # event has not yet passed, check how much time until it should trigger
+            delta = eventime - current_date
         else:
-            delta = eventime -  current_date
-            print(delta)
+            continue
+
+        #  5 mins => delta > 4 mins 
+        if delta <= timedelta(minutes=5) and delta > timedelta(minutes=4):
+            closeEvents.append(event) # those events will be notified as close to execution to user
+
+        if delta <= timedelta(minutes=1):
+            executeNowEvents.append(event) # those events will be executed
+
+    # notify user of upcoming events
+    if(len(closeEvents) > 1):
+        notify(f"{len(closeEvents)} starting in 5 minutes")
+    elif(len(closeEvents) == 1):
+        name = closeEvents[0]['name']
+        notify(f"{name} starting in 5 minutes")
+
+    return executeNowEvents
 
 
 def getEvents():
