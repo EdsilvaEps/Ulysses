@@ -13,8 +13,10 @@ import subprocess
 import sys
 import os
 import webbrowser
+import time
 from datetime import datetime, timedelta
 
+lastEventList = []
 startupEvents = []
 todaysEvents = []
 
@@ -45,12 +47,15 @@ def executeEvents(events):
             args = ' '.join(event['args'])
             os.system(f"gnome-terminal -e 'bash -c \"python3 {script} {args}; exec bash\"'")
 
+        # if event['type'] == 'exe': # fill this for windows 
+
 
 # organize list of events so we have a sublist for
 # startup events and another for events that will trigger today
 # to decrease number of operations
 def organizeEvents():
     # Get the current date
+    print("organizing events...")
     current_date = datetime.now()
 
     # Get the day of the week
@@ -58,7 +63,9 @@ def organizeEvents():
 
     try:
         events = getEvents()
+        lastEventList.clear()
         for event in events:
+            lastEventList.append(event)
             if event['startupmode'] == 'atStartup':
                 startupEvents.append(event)
                 print("organized startup event")
@@ -71,6 +78,7 @@ def organizeEvents():
         print(error)
 
 def checkTasks():
+    print('checking tasks....')
     # here check tasks for notification or execution conditions
     # like startup or schedule
     current_date = datetime.now()
@@ -84,7 +92,6 @@ def checkTasks():
         eventime = eventime.replace(year=current_date.year, month=
                                     current_date.month, day=current_date.day)
 
-        print(eventime)
         if(current_date < eventime):
             # event has not yet passed, check how much time until it should trigger
             delta = eventime - current_date
@@ -123,13 +130,27 @@ def getEvents():
     if not data:
         raise ValueError("no data available")
 
-    # example event
-    for data_event in data:
-        print(data_event)
-
     return data
 
-getEvents()
-organizeEvents()
-executeEvents(checkTasks())
+# if items have been added or removed, reorganize event lists
+def updateEvents():
+    print('updating event list...')
+    events = getEvents()
+    if lastEventList != events: 
+        organizeEvents()
+
+
+def main():
+    organizeEvents()
+    executeEvents(startupEvents) # execute startup events
+    
+    while True:
+        # check events every minute
+        updateEvents()
+        executeEvents(checkTasks())
+        time.sleep(60)
+
+
+if __name__ == "__main__":
+    main()
 
