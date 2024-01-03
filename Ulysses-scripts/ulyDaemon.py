@@ -11,6 +11,8 @@ path = dataPath + dataFile
 import json
 import subprocess
 import sys
+import os
+import webbrowser
 from datetime import datetime, timedelta
 
 startupEvents = []
@@ -27,6 +29,22 @@ def notify(message):
     if sys.platform.startswith('cygwin') or sys.platform.startswith('win32'):
         # do something
         pass
+
+def executeEvents(events):
+    # given a list of events, run them
+    for event in events:
+        if event['type'] == 'link':
+            webbrowser.open(event['path'])
+        if event['type'] == 'script_shell':
+            script = event['path']
+            args = ' '.join(event['args'])
+            os.system(f"gnome-terminal -e 'bash -c \"sh {script} {args}; exec bash\"'")
+
+        if event['type'] == 'script_python':
+            script = event['path']
+            args = ' '.join(event['args'])
+            os.system(f"gnome-terminal -e 'bash -c \"python3 {script} {args}; exec bash\"'")
+
 
 # organize list of events so we have a sublist for
 # startup events and another for events that will trigger today
@@ -113,5 +131,5 @@ def getEvents():
 
 getEvents()
 organizeEvents()
-checkTasks()
+executeEvents(checkTasks())
 
