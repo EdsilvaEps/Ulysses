@@ -1,25 +1,29 @@
 #!/bin/bash
 
-# installation script for UlyssesApp services
+# linux installation script for UlyssesApp services 
 
 # add a way to get the python path
-PYTHON='/usr/bin/python3'
-SCRIPTLOC='/home/edson/Documents/Ulysses/Ulysses-scripts/ulyDaemon.py'
+SYSHOME=$(echo $HOME)
+ULYSSESFILE='ulysses.desktop'
+SCRIPTLOC=$SYSHOME'/ulyDaemon.py' # make this flexible
+ULYSSESPATH=$SYSHOME'/Documents/Ulysses/build-UlyssesApp-Desktop_Qt_6_4_0_GCC_64bit-Debug/UlyssesApp'
+CONFIGDIR=$SYSHOME'/.config/autostart'
 # searchPython()
 
-rm -rf /etc/systemd/system/ulyssesd.service
-# create systemd file for python
-echo "Installing daemon"
+if test -f "$CONFIGDIR"; then
+    echo "$CONFIGDIR exists."
+    sudo rm -rf $CONFIGDIR/$ULYSSESFILE
+else
+    echo "$CONFIGDIR does not exist, creating..."
+    mkdir $CONFIGDIR
+fi
 
-echo "[Unit]" > /etc/systemd/system/ulyssesd.service
-echo -e "Description=Ulysses App Daemon\n" >> /etc/systemd/system/ulyssesd.service
+# create .desktop file for UlyssesApp
+echo "Installing UlyssesApp"
 
-echo "[Service]" >> /etc/systemd/system/ulyssesd.service
-echo "ExecStart=$PYTHON $SCRIPTLOC" >> /etc/systemd/system/ulyssesd.service
-echo -e "Restart=always\n" >> /etc/systemd/system/ulyssesd.service
-
-echo "[Install]" >> /etc/systemd/system/ulyssesd.service
-echo "WantedBy=multi-user.target" >> /etc/systemd/system/ulyssesd.service
-
-sudo systemctl enable ulyssesd.service
-sudo systemctl start ulyssesd.service
+echo "[Desktop Entry]" >> $CONFIGDIR/$ULYSSESFILE
+echo "Type=Application" >> $CONFIGDIR/$ULYSSESFILE
+echo "Name=UlyssesApp" >> $CONFIGDIR/$ULYSSESFILE
+echo "Exec=$ULYSSESPATH" >> $CONFIGDIR/$ULYSSESFILE
+echo "Comment=Ulysses Interface Initializer" >> $CONFIGDIR/$ULYSSESFILE
+echo "X-GNOME-Autostart-enabled=true" >> $CONFIGDIR/$ULYSSESFILE

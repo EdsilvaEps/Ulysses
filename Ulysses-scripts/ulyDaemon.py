@@ -20,17 +20,6 @@ lastEventList = []
 startupEvents = []
 todaysEvents = []
 
-# absolute path to UlyssesApp initializer
-pathToInterface = '/home/edson/Documents/Ulysses/build-UlyssesApp-Desktop_Qt_6_4_0_GCC_64bit-Debug/UlyssesApp'
-
-def startUlysses():
-
-    try:
-        subprocess.run([pathToInterface], check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Error: {e}")
-        notify("could not find the path to app executable")
-
 def notify(message):
 
     # if windows
@@ -152,7 +141,6 @@ def updateEvents():
 
 
 def main():
-    startUlysses()
     organizeEvents()
     executeEvents(startupEvents) # execute startup events
     
